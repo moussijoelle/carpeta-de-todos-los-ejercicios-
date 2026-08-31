@@ -7,13 +7,13 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "public/img/posts"
+media_folder: "prueba teórica UF1846/public/img/posts"
 public_folder: "/img/posts"
 
 collections:
   - name: "posts"
     label: "Entradas del Blog"
-    folder: "src/content/blog"
+    folder: "prueba teórica UF1846/src/content/blog"
     create: true
     slug: "{{slug}}"
     fields:
