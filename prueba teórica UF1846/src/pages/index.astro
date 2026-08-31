@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Frente a la sociedad"
+  description="Un blog de preguntas honestas frente a la sociedad."
+  fondoHero={true}
+>
+  <section class="flex min-h-[75vh] flex-col items-end justify-end space-y-8 pb-10 pt-48 text-right md:min-h-[80vh] md:pb-16 md:pt-64">
+    <div class="ml-auto max-w-3xl space-y-4">
+      <p class="text-sm font-semibold uppercase tracking-widest text-acento-claro">
+        Blog personal
+      </p>
+
+      <p class="text-xl font-medium leading-snug text-white/90 md:text-2xl">
+        ¿Por qué me hago todas estas preguntas?
+      </p>
+    </div>
+
+    <div class="ml-auto max-w-3xl space-y-5 text-right text-lg leading-relaxed text-white/95">
+      <p>
+        En una sociedad que no se detiene, este espacio nace de la necesidad de
+        mirar de frente todo aquello que a menudo callamos: el{' '}
+        <strong class="text-white">amor</strong>, la{' '}
+        <strong class="text-white">alegría</strong>, la{' '}
+        <strong class="text-white">resiliencia del pasado</strong>, el{' '}
+        <strong class="text-white">bienestar mental</strong>; la{' '}
+        <strong class="text-white">alimentación consciente</strong>, la raza y el
+        color de la piel y la{' '}
+        <strong class="text-white">hipersensibilidad</strong>; la idea que tenemos
+        del <strong class="text-white">descanso</strong>, de la{' '}
+        <strong class="text-white">muerte</strong> y del{' '}
+        <strong class="text-white">futuro</strong>.
+      </p>
+
+      <p>
+        Te doy la bienvenida a esta pausa. Aquí no escribo para dar lecciones,
+        sino para entender, para sanar y para acompañarte en esas mismas preguntas
+        que nos hacemos todos.
+      </p>
+    </div>
+
+    <a
+      href="/blog"
+      class="ml-auto inline-flex w-fit rounded-xl bg-acento px-6 py-3.5 text-sm font-semibold text-papel shadow-sm hover:bg-acento-oscuro transition-colors"
+    >
+      Ir al blog
+    </a>
+  </section>
+</Layout>

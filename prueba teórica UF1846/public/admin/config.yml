@@ -1,0 +1,48 @@
+local_backend: true
+
+site_url: /
+display_url: /
+
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/img/posts"
+public_folder: "/img/posts"
+
+collections:
+  - name: "posts"
+    label: "Entradas del Blog"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - label: "Título"
+        name: "title"
+        widget: "string"
+      - label: "Fecha de publicación"
+        name: "pubDate"
+        widget: "datetime"
+      - label: "Descripción"
+        name: "description"
+        widget: "text"
+      - label: "Autor"
+        name: "author"
+        widget: "string"
+        default: "Joelle Moussi"
+      - label: "Imagen destacada"
+        name: "image"
+        widget: "object"
+        fields:
+          - label: "Archivo"
+            name: "url"
+            widget: "image"
+          - label: "Texto alternativo"
+            name: "alt"
+            widget: "string"
+      - label: "Etiquetas"
+        name: "tags"
+        widget: "list"
+      - label: "Contenido"
+        name: "body"
+        widget: "markdown"

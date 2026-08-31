@@ -1,0 +1,63 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { ordenarPorFechaMasReciente } from '../../utils/blog';
+
+type Post = CollectionEntry<'posts'>;
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = await getCollection('posts');
+  const ordenados = posts.sort(ordenarPorFechaMasReciente);
+  return paginate(ordenados, { pageSize: 4 });
+}
+
+interface Props {
+  page: Page<Post>;
+}
+
+const { page } = Astro.props as Props;
+---
+
+<Layout title="Artículos — Frente a la sociedad">
+  <section class="space-y-12">
+    <div class="space-y-3 border-b border-white/20 pb-8">
+      <p class="text-sm font-semibold uppercase tracking-widest text-acento-claro">
+        Archivo
+      </p>
+      <h1 class="text-3xl font-bold text-white md:text-4xl">Todos los artículos</h1>
+    </div>
+
+    <div class="grid gap-8 md:grid-cols-2 md:gap-10">
+      {page.data.map(function mostrarTarjeta(post: Post) {
+        return (
+          <PostCard
+            id={post.id}
+            title={post.data.title}
+            description={post.data.description}
+            author={post.data.author}
+            pubDate={post.data.pubDate}
+            imageUrl={post.data.image.url}
+            imageAlt={post.data.image.alt}
+            tag={post.data.tags[0]}
+          />
+        );
+      })}
+    </div>
+
+    <nav class="flex items-center justify-between border-t border-white/20 pt-6 text-sm">
+      {page.url.prev
+        ? <a href={page.url.prev} class="font-semibold text-acento-claro hover:text-white">← Anterior</a>
+        : <span class="text-white/50">← Anterior</span>}
+
+      <span class="font-medium text-white/80">
+        Página {page.currentPage} de {page.lastPage}
+      </span>
+
+      {page.url.next
+        ? <a href={page.url.next} class="font-semibold text-acento-claro hover:text-white">Siguiente →</a>
+        : <span class="text-white/50">Siguiente →</span>}
+    </nav>
+  </section>
+</Layout>

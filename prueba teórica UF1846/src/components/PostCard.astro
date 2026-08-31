@@ -1,0 +1,42 @@
+---
+import { formatearFecha } from '../utils/blog';
+
+const { id, title, description, author, pubDate, imageUrl, imageAlt, tag } =
+  Astro.props;
+---
+
+<article class="group space-y-4 rounded-3xl border border-linea bg-papel p-4 transition-shadow hover:border-acento/40 hover:shadow-md">
+  <a href={`/blog/${id}`} class="block overflow-hidden rounded-2xl">
+    <img
+      src={imageUrl}
+      alt={imageAlt}
+      class="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+    />
+  </a>
+
+  <div class="space-y-3">
+    <div class="flex flex-wrap items-center gap-2 text-sm text-suave">
+      <span>{author} · {formatearFecha(pubDate)}</span>
+      {tag && (
+        <span class="rounded-full bg-acento-claro px-2.5 py-0.5 text-xs font-semibold text-acento">
+          {tag}
+        </span>
+      )}
+    </div>
+
+    <h2 class="text-xl font-bold text-tinta">
+      <a href={`/blog/${id}`} class="hover:text-acento transition-colors">
+        {title}
+      </a>
+    </h2>
+
+    <p class="leading-relaxed text-tinta">{description}</p>
+
+    <a
+      href={`/blog/${id}`}
+      class="inline-flex text-sm font-semibold text-acento hover:text-acento-oscuro"
+    >
+      Leer más →
+    </a>
+  </div>
+</article>

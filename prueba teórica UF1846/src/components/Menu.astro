@@ -1,0 +1,88 @@
+---
+const enlaces = [
+  { href: '/', label: 'Inicio' },
+  { href: '/about', label: 'Sobre mí' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contacto', label: 'Contacto' },
+  { href: '/admin/index.html', label: 'Administrar Blog' },
+];
+---
+
+<div class="flex h-20 min-w-0 flex-1 items-center justify-end px-3 sm:px-4 md:h-24 md:justify-center md:px-6">
+  <button
+    type="button"
+    id="abrir-menu"
+    class="rounded-md p-2 text-claro hover:text-white md:hidden"
+    aria-expanded="false"
+    aria-controls="menu-movil"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+    <span class="sr-only">Abrir menú</span>
+  </button>
+
+  <nav class="hidden shrink-0 items-center gap-6 text-sm font-semibold text-claro md:flex">
+    {enlaces.map(function crearEnlace(enlace) {
+      return (
+        <a href={enlace.href} class="whitespace-nowrap transition-colors hover:text-white">
+          {enlace.label}
+        </a>
+      );
+    })}
+  </nav>
+</div>
+
+<nav
+  id="menu-movil"
+  class="fixed left-0 right-0 top-20 z-50 hidden border-t border-white/15 bg-cabecera/95 px-4 py-3 shadow-lg backdrop-blur-sm md:hidden"
+>
+  <div class="flex flex-col items-center gap-0.5 text-center text-sm font-semibold text-claro">
+    {enlaces.map(function crearEnlaceMovil(enlace) {
+      return (
+        <a
+          href={enlace.href}
+          class="w-full max-w-xs rounded-md px-2 py-2 transition-colors hover:bg-white/10 hover:text-white"
+        >
+          {enlace.label}
+        </a>
+      );
+    })}
+  </div>
+</nav>
+
+<script>
+  const botonMenu = document.getElementById('abrir-menu');
+  const panelMovil = document.getElementById('menu-movil');
+
+  function alternarMenuMovil() {
+    if (!botonMenu || !panelMovil) return;
+
+    const menuAbierto = panelMovil.classList.contains('hidden');
+    panelMovil.classList.toggle('hidden');
+    botonMenu.setAttribute('aria-expanded', String(menuAbierto));
+  }
+
+  function cerrarMenuMovil() {
+    if (!botonMenu || !panelMovil) return;
+
+    panelMovil.classList.add('hidden');
+    botonMenu.setAttribute('aria-expanded', 'false');
+  }
+
+  botonMenu?.addEventListener('click', alternarMenuMovil);
+
+  panelMovil?.querySelectorAll('a').forEach(function enlazarCierre(enlace) {
+    enlace.addEventListener('click', cerrarMenuMovil);
+  });
+
+  document.addEventListener('click', function cerrarSiClickFuera(evento) {
+    if (!botonMenu || !panelMovil || panelMovil.classList.contains('hidden')) return;
+
+    const objetivo = evento.target;
+    if (!(objetivo instanceof Node)) return;
+    if (panelMovil.contains(objetivo) || botonMenu.contains(objetivo)) return;
+
+    cerrarMenuMovil();
+  });
+</script>

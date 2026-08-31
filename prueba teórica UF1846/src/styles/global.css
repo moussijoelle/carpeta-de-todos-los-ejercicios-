@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@source "../**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}";
+
+@theme {
+  --color-fondo: #eef2f0;
+  --color-papel: #fafcfb;
+  --color-tinta: #121a1a;
+  --color-suave: #3f4f4c;
+  --color-acento: #0b6e6a;
+  --color-acento-oscuro: #085652;
+  --color-acento-claro: #d5e8e5;
+  --color-linea: #d0dbd7;
+  --color-pie: #1a3331;
+  --color-cabecera: #1a3331;
+  --color-claro: #d5e4e2;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--color-tinta);
+  line-height: 1.7;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+}
+
+.article-body > :first-child {
+  margin-top: 0;
+}
+
+.article-body h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--color-linea);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-tinta);
+}
+
+.article-body p {
+  margin-bottom: 1.4rem;
+  color: var(--color-tinta);
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+
+.article-body strong {
+  font-weight: 700;
+  color: var(--color-tinta);
+}
+
+.article-body a {
+  color: var(--color-acento);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

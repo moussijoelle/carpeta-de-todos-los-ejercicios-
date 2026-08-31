@@ -1,0 +1,99 @@
+:root {
+  --fondo: #eef2f0;
+  --papel: #fafcfb;
+  --tinta: #121a1a;
+  --suave: #3f4f4c;
+  --acento: #0b6e6a;
+  --acento-oscuro: #085652;
+  --acento-claro: #d5e8e5;
+  --linea: #d0dbd7;
+  --cabecera: #1a3331;
+  --claro: #d5e4e2;
+}
+
+body {
+  background: var(--fondo) !important;
+}
+
+/* Cabecera del CMS */
+[class*="AppHeader"],
+.nc-appHeader-main,
+header[class*="css-"] {
+  background-color: var(--cabecera) !important;
+}
+
+[class*="AppHeader"] a,
+[class*="AppHeader"] button,
+.nc-appHeader-button {
+  color: var(--claro) !important;
+}
+
+/* Botón principal */
+button[class*="Primary"],
+.nc-button-primary,
+[class*="css-"][class*="primary"],
+button.css-1ijzq3,
+div[class*="ToolbarButton"] button[class*="primary"] {
+  background-color: var(--acento) !important;
+  border-color: var(--acento) !important;
+  color: #fff !important;
+}
+
+button[class*="Primary"]:hover,
+.nc-button-primary:hover {
+  background-color: var(--acento-oscuro) !important;
+}
+
+/* Enlaces activos / acentos */
+a[class*="active"],
+[class*="CollectionLabel"],
+[aria-current="page"] {
+  color: var(--acento) !important;
+}
+
+/* Fondo de listas y editor */
+[class*="MainView"],
+[class*="CollectionPage"],
+[class*="Entries"],
+main {
+  background-color: var(--fondo) !important;
+}
+
+[class*="Card"],
+[class*="card"],
+[class*="EditorContainer"],
+[class*="ControlContainer"] {
+  background-color: var(--papel) !important;
+  border-color: var(--linea) !important;
+}
+
+/* Tipografía */
+body,
+input,
+textarea,
+select,
+button {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important;
+  color: var(--tinta);
+}
+
+.volver-blog {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  z-index: 9999;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--claro);
+  background: var(--cabecera);
+  border: 1px solid rgba(213, 228, 226, 0.35);
+  border-radius: 8px;
+  padding: 8px 12px;
+  text-decoration: none;
+}
+
+.volver-blog:hover {
+  background: var(--acento);
+  text-decoration: none;
+}

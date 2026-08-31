@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="/admin/admin.css" />
+  </head>
+  <body>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      function ponerEnlaceVolver() {
+        if (document.querySelector('.volver-blog')) return;
+        var enlace = document.createElement('a');
+        enlace.className = 'volver-blog';
+        enlace.href = '/blog';
+        enlace.textContent = '← Volver al blog';
+        document.body.appendChild(enlace);
+      }
+      ponerEnlaceVolver();
+      setTimeout(ponerEnlaceVolver, 800);
+    </script>
+  </body>
+</html>

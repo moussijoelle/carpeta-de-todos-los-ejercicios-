@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import Menu from '../components/Menu.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  fondoHero = false,
+} = Astro.props;
+
+const imagenFondo = fondoHero ? '/img/hero.jpg' : '/img/fondo-sitio.jpg';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/img/icons/icono.jpg" type="image/jpeg" sizes="any" />
+    <link rel="shortcut icon" href="/img/icons/icono.jpg" type="image/jpeg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.jpg" />
+    <title>{title}</title>
+  </head>
+  <body
+    class="min-h-screen bg-cover bg-center bg-fixed text-white antialiased"
+    style={`background-image: url('${imagenFondo}')`}
+  >
+    <div
+      class:list={[
+        'pointer-events-none fixed inset-0 z-0',
+        fondoHero ? 'bg-black/55' : 'bg-black/60',
+      ]}
+      aria-hidden="true"
+    ></div>
+
+    <div class="relative z-10 flex min-h-screen flex-col">
+      <header class="sticky top-0 z-40 bg-cabecera/85 backdrop-blur-sm">
+        <div class="flex w-full items-start">
+          <a
+            href="/"
+            class="flex h-20 shrink-0 items-stretch bg-white md:h-24"
+          >
+            <img
+              src="/img/logo.png"
+              alt="Frente a la sociedad"
+              class="block h-full w-auto object-contain object-left"
+            />
+          </a>
+
+          <Menu />
+        </div>
+      </header>
+
+      <main class="mx-auto w-[92%] max-w-7xl flex-1 px-4 py-10">
+        <slot />
+      </main>
+
+      <SiteFooter />
+    </div>
+
+    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', function (user) {
+          if (!user) {
+            window.netlifyIdentity.on('login', function () {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
