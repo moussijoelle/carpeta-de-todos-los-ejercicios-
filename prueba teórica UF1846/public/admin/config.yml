@@ -14,6 +14,8 @@ collections:
   - name: "posts"
     label: "Entradas del Blog"
     folder: "prueba teórica UF1846/src/content/blog"
+    extension: md
+    format: frontmatter
     create: true
     slug: "{{slug}}"
     fields:
