@@ -1,7 +1,6 @@
 [build]
-  command = "pnpm build"
+  command = "corepack enable && pnpm build"
   publish = "dist"
-  # Redeploy para actualizar config.yml del admin
 
 [build.environment]
   NODE_VERSION = "22"
