@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide — Exercice CRUD Edificios</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/daisyui.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5.5.19/themes.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Urbanist', sans-serif; }
+    .prose h2 { margin-top: 2rem; margin-bottom: 0.75rem; font-weight: 800; font-size: 1.35rem; }
+    .prose h3 { margin-top: 1.25rem; margin-bottom: 0.5rem; font-weight: 600; font-size: 1.1rem; }
+    .prose p, .prose li { line-height: 1.7; }
+    .prose ul { list-style: disc; padding-left: 1.5rem; margin: 0.75rem 0; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    .prose th, .prose td { border: 1px solid oklch(var(--bc) / 0.2); padding: 0.6rem 0.8rem; text-align: left; }
+    .prose th { background: oklch(var(--b2)); font-weight: 600; }
+    .example-box { background: oklch(var(--b2)); border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0; }
+  </style>
+</head>
+<body class="bg-base-100 text-base-content min-h-screen">
+
+  <header class="border-b border-base-200 bg-base-200/50 px-4 py-6">
+    <div class="mx-auto max-w-3xl">
+      <p class="text-sm font-semibold uppercase tracking-widest text-primary">Exercice CRUD — Edificios (sans héritage)</p>
+      <h1 class="mt-1 text-3xl font-extrabold">Guide de l'exercice</h1>
+      <p class="mt-2 text-base-content/70">Explications pour débutant · comme en cours avec le prof</p>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-3xl px-4 py-8 prose">
+
+    <section class="card bg-base-200/40 shadow-sm mb-8">
+      <div class="card-body">
+        <h2 class="mt-0">L'idée générale</h2>
+        <p>
+          Imagine que tu travailles pour une entreprise qui <strong>nettoie des immeubles</strong>.
+          Ton travail, c'est de faire une <strong>petite application</strong> (un programme) pour
+          <strong>gérer</strong> tous les bâtiments que l'entreprise entretient.
+        </p>
+        <p>
+          Tu dois créer un <strong>carnet numérique</strong> où tu peux :
+        </p>
+        <ul>
+          <li><strong>Ajouter</strong> un nouvel immeuble</li>
+          <li><strong>Voir</strong> la liste de tous les immeubles</li>
+          <li><strong>Voir les détails</strong> d'un immeuble</li>
+          <li><strong>Modifier</strong> seulement sa surface (en m²)</li>
+          <li><strong>Supprimer</strong> un immeuble de la liste</li>
+          <li><strong>Calculer</strong> combien coûte le nettoyage de <strong>tous</strong> les immeubles sur un mois</li>
+        </ul>
+        <p>
+          C'est ce qu'on appelle un <strong>CRUD</strong> :
+          <strong>C</strong>réer, <strong>R</strong>ead (lire), <strong>U</strong>pdate (modifier),
+          <strong>D</strong>elete (supprimer).
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Chaque immeuble, c'est quoi ?</h2>
+      <p>Pour chaque bâtiment, tu dois connaître <strong>3 informations</strong> :</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Information</th>
+            <th>Exemple</th>
+            <th>Peut-on la changer après ?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Nom</strong></td>
+            <td>« Tour Montparnasse »</td>
+            <td>Non, seulement la lire</td>
+          </tr>
+          <tr>
+            <td><strong>Nombre d'étages</strong></td>
+            <td>3 étages</td>
+            <td>Non, seulement le lire</td>
+          </tr>
+          <tr>
+            <td><strong>Surface</strong></td>
+            <td>150 m²</td>
+            <td><strong>Oui</strong>, c'est la seule chose modifiable</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        C'est logique : le nom et le nombre d'étages ne changent pas souvent.
+        Par contre, la surface utile à nettoyer peut évoluer (rénovation, nouveau local, etc.).
+      </p>
+    </section>
+
+    <section>
+      <h2>La « classe » Edificio — une fiche type</h2>
+      <p>
+        En programmation, une <strong>classe</strong> est comme un <strong>modèle de fiche</strong> :
+        chaque immeuble que tu crées est une <strong>copie</strong> de cette fiche.
+      </p>
+      <p>
+        Quand tu crées un immeuble (<code>new Edificio(...)</code>), tu donnes les 3 infos d'un coup.
+      </p>
+      <p>
+        Ensuite, certaines infos sont <strong>verrouillées</strong> (attributs <strong>privés</strong>
+        avec <code>#</code> en JavaScript) :
+      </p>
+      <ul>
+        <li><strong>Dehors</strong> de la classe → tu ne peux plus y toucher directement</li>
+        <li><strong>À l'intérieur</strong> de la classe → elle peut toujours les lire et les utiliser</li>
+      </ul>
+      <p>
+        C'est comme un <strong>coffre-fort</strong> : une fois la fiche créée, seul le programme
+        « Edificio » a la clé. Toi, de l'extérieur, tu passes par des <strong>méthodes</strong>
+        prévues pour ça (lire le nom, modifier la surface, etc.).
+      </p>
+
+      <div class="example-box">
+        <h3 class="mt-0">Règle importante du prof</h3>
+        <p class="mb-0">
+          <strong>À la création</strong> (<code>new Class</code>) : tu peux passer tous les données
+          nécessaires au constructeur, qu'elles deviennent publiques ou privées.<br>
+          <strong>Après la création</strong> : le programme perd l'accès direct aux attributs privés
+          (<code>#</code>). Seule la classe peut les lire ou les modifier.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>La méthode <code>limpiar()</code> — combien de temps pour nettoyer ?</h2>
+      <p>Chaque immeuble sait <strong>estimer le temps de nettoyage</strong>. Les règles de l'entreprise :</p>
+
+      <h3>1. La surface</h3>
+      <ul>
+        <li><strong>1 minute</strong> pour nettoyer <strong>5 m²</strong></li>
+        <li>Exemple : 100 m² → 100 ÷ 5 = <strong>20 minutes</strong></li>
+      </ul>
+
+      <h3>2. Les étages</h3>
+      <ul>
+        <li>S'il y a <strong>plus d'un étage</strong>, il faut <strong>monter</strong> d'un étage à l'autre</li>
+        <li><strong>+ 0,5 minute</strong> par étage <strong>en plus</strong> du premier</li>
+        <li>Exemple : 4 étages → 3 étages « en plus » → + 1,5 minute</li>
+      </ul>
+
+      <h3>3. Le coût</h3>
+      <ul>
+        <li><strong>1 € par minute</strong> de travail <strong>par jour</strong> (on nettoie chaque jour)</li>
+        <li><strong>Coût mensuel</strong> = coût d'un jour × <strong>30</strong></li>
+      </ul>
+
+      <div class="example-box">
+        <h3 class="mt-0">Exemple complet</h3>
+        <ul class="mb-0">
+          <li>Surface : 100 m² → 20 min</li>
+          <li>Étages : 4 → + 1,5 min</li>
+          <li><strong>Total</strong> : 21,5 min/jour → <strong>21,5 €/jour</strong> → <strong>645 €/mois</strong></li>
+        </ul>
+      </div>
+
+      <p>
+        La méthode <code>limpiar()</code> <strong>affiche</strong> ce temps.
+        Le coût mensuel doit aussi s'afficher quand tu consultes les données d'un immeuble.
+      </p>
+    </section>
+
+    <section>
+      <h2>Ce que l'application doit faire concrètement</h2>
+      <ol class="list-decimal pl-6 space-y-2 my-4">
+        <li><strong>Ajouter</strong> un immeuble (nom, étages, surface)</li>
+        <li><strong>Modifier</strong> uniquement la surface d'un immeuble</li>
+        <li><strong>Supprimer</strong> un immeuble</li>
+        <li><strong>Afficher</strong> les infos d'un immeuble (avec le coût mensuel de nettoyage)</li>
+        <li><strong>Lister</strong> tous les immeubles</li>
+        <li><strong>Calculer</strong> le coût mensuel <strong>total</strong> pour <strong>tous</strong> les immeubles</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Le petit truc du prof</h2>
+      <p>
+        Pour tester sans tout saisir à la main, mets <strong>3 ou 4 immeubles fictifs</strong>
+        dans une liste au départ. Comme ça tu vois tout de suite si tes calculs et tes boutons fonctionnent.
+      </p>
+    </section>
+
+    <section class="card bg-primary/10 border border-primary/20 mt-10">
+      <div class="card-body">
+        <h2 class="mt-0 text-primary">Résumé en une phrase</h2>
+        <p class="mb-0 text-lg">
+          Tu construis un <strong>gestionnaire d'immeubles</strong> où chaque bâtiment est une
+          <strong>fiche protégée</strong> (nom et étages figés, surface modifiable), qui
+          <strong>calcule automatiquement</strong> le temps et le coût de nettoyage, et où tu peux
+          <strong>ajouter, lire, modifier la surface, supprimer</strong> et voir le
+          <strong>coût mensuel</strong> d'un immeuble ou de <strong>tous</strong>.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-base-200 px-4 py-6 text-center text-sm text-base-content/50">
+    Guide pédagogique — Exercice CRUD Edificios (sin herencia)
+  </footer>
+
+</body>
+</html>

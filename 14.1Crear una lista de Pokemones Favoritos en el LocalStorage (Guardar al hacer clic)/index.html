@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    a {
+      display: block;
+      color: #dbeafe;
+      padding-bottom: 0.5px;
+    }
+    a:hover {color: #ff8400ac;}
+  </style>
+  <title>API Pokemon</title>
+</head>
+<body class="flex flex-col h-screen bg-slate-100 overflow-hidden">
+  <!-- Para que el contenedor ocupe todo el alto de la pantalla,
+  el body debe tener una estructura flex vertical 
+  y el container debe "crecer" con flex-1. -->
+  <div id="container" class="flex flex-col flex-1 w-full  mx-auto pb-2">
+    <header class="w-full py-2 bg-amber-500 text-white flex items-center">
+      <h1 class="text-3xl ml-4 font-extrabold tracking-wide drop-shadow-[0_2px_4px_rgba(146,64,14,0.5)]">PokéAPI</h1>
+      <button type="button" id="btn-auditar"
+        class="ml-4 px-3 py-1 bg-white text-amber-600 rounded text-sm font-bold hover:bg-amber-50">
+        Auditar localStorage
+      </button>
+    </header>
+    <div id="wrapper" class="flex flex-1 w-full">
+      <aside id="lista" class="h-full w-3/12 flex flex-col justify-between text-sm bg-slate-800 text-white">
+        <h3 id="enc-lista" class="font-bold text-center text-base pt-0.5 md:pt-2" >Pokémons</h3>
+        <div id="lista-pokemons" class="h-px flex-1 pt-0.5 pb-2 px-0.5 overflow-y-auto text-xs md:pl-6"></div>
+        <nav class="flex justify-evenly items-center border-t border-slate-200 pb-2 shrink-0">
+          <button class="py-1" type="button" id="anterior">
+            <img class="w-6" title="anterior" src="previous.svg" alt="anterior">
+          </button>
+          <p class="text-xs mx-1">más...</p>
+          <button class="py-1" type="button" id="siguiente">
+            <img class="w-6" title="siguiente" src="next.svg" alt="siguiente">
+          </button>
+        </nav>
+      </aside>
+      <main id="pokemon" class="w-9/12 pt-0.5 pb-2 px-0.5 overflow-y-auto">
+        <h2 class="text-xl text-center text-amber-500">Datos del Pokémon</h2>
+        <div id="detalle-pokemon" class="p-4 hidden"></div>
+        <section class="mt-4 px-4">
+          <h2 class="text-xl text-center text-amber-500 mb-2">Mis Favoritos</h2>
+          <div id="lista-favoritos" class="flex flex-wrap gap-3 justify-center"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="./js/app.js"></script>
+</body>
+</html>

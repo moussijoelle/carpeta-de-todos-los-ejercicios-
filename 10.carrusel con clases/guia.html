@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide — Projet carrousel : créer les objets avec des classes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-50 text-gray-800 leading-relaxed min-h-screen">
+
+  <main class="max-w-3xl mx-auto px-6 py-10">
+
+    <p class="mb-4">
+      <a href="index.html" class="text-amber-700 hover:underline">← Retour au carrousel</a>
+    </p>
+
+    <h1 class="text-3xl font-bold border-b-2 border-amber-500 pb-2 mb-6">
+      Guide du projet carrousel — Exercice : créer les objets du carrousel avec des classes
+    </h1>
+
+    <p class="italic text-gray-600 mb-6">
+      Guide créé pour le projet du carrousel d'animes. Il explique l'exercice « Créer les objets du carrousel avec des classes » étape par étape, comme si la prof t'expliquait tout doucement.
+    </p>
+
+    <!-- SECTION 1 : L'exercice -->
+    <h2 class="text-xl font-semibold text-gray-700 mt-8 mb-4">1. De quoi parle l'exercice ?</h2>
+
+    <p class="mb-3">Tu as une page web avec un <strong>carrousel</strong> : une image (ou du texte), un titre, une description. Tu peux passer au slide suivant avec les boutons › ‹.</p>
+
+    <p class="mb-3">Chaque « écran » du carrousel, c'est un <strong>slide</strong> :</p>
+    <ul class="list-disc list-inside mb-4 space-y-1">
+      <li>la page d'accueil (portada, texte sans image),</li>
+      <li>les 20 animes (image + nom + description),</li>
+      <li>la page d'info à la fin (thème jour/nuit, lien Wikipedia).</li>
+    </ul>
+
+    <h3 class="text-lg font-medium text-gray-600 mt-6 mb-3">Le problème de départ</h3>
+    <p class="mb-3">Au début, les animes étaient écrits comme une liste désordonnée dans un seul fichier, sans modèle :</p>
+    <pre class="bg-white border border-stone-200 rounded-lg p-4 text-sm overflow-x-auto mb-4"><code>{ "Anime 1": { nombre: "City Hunter", imagen: "img/1.jpg", ... } }</code></pre>
+    <p class="mb-3">Ça marche, mais ce n'est pas la méthode qu'on apprend en cours.</p>
+
+    <h3 class="text-lg font-medium text-gray-600 mt-6 mb-3">Ce que demande l'exercice</h3>
+    <p class="mb-3">La consigne dit : <strong>créer les objets du carrousel avec des classes</strong>.</p>
+
+    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+      <p class="font-medium mb-2">En une phrase :</p>
+      <p>Tu ne décris plus tes animes avec des objets bricolés ; tu as une classe <code class="bg-white px-1 rounded">Imagen</code>, et chaque slide du carrousel est créé avec <code class="bg-white px-1 rounded">new Imagen(...)</code>.</p>
+    </div>
+
+    <h3 class="text-lg font-medium text-gray-600 mt-6 mb-3">Les 3 fichiers (comme la prof)</h3>
+    <pre class="bg-white border border-stone-200 rounded-lg p-4 text-sm overflow-x-auto mb-4"><code>&lt;script src="js/claseImagen.js"&gt;&lt;/script&gt;  &lt;!-- 1. la classe --&gt;
+&lt;script src="js/datos.js"&gt;&lt;/script&gt;         &lt;!-- 2. les données --&gt;
+&lt;script src="js/carrousel.js"&gt;&lt;/script&gt;     &lt;!-- 3. les opérations --&gt;</code></pre>
+
+    <p class="mb-3 text-sm text-gray-600">Note : <code class="bg-stone-100 px-1 rounded">datos.js</code> remplace <code class="bg-stone-100 px-1 rounded">imagenes.js</code> du slide de cours — c'est le même rôle (les données), seul le nom du fichier change.</p>
+
+    <!-- SECTION 2 : Les 3 définitions -->
+    <h2 class="text-xl font-semibold text-gray-700 mt-10 mb-4">2. Les 3 définitions</h2>
+
+    <div class="space-y-4 mb-6">
+      <div class="bg-white border border-stone-200 rounded-lg p-4 shadow-sm">
+        <h3 class="font-semibold text-amber-800 mb-2">claseImagen.js — La classe (le moule)</h3>
+        <p>C'est le <strong>modèle</strong> qui dit à quoi ressemble un slide du carrousel. Une fiche vide avec des cases : image, nom, titre, description… On n'y met pas les vrais animes. On dit seulement : <em>« Chaque slide aura cette forme. »</em></p>
+      </div>
+
+      <div class="bg-white border border-stone-200 rounded-lg p-4 shadow-sm">
+        <h3 class="font-semibold text-amber-800 mb-2">datos.js — Les données</h3>
+        <p>C'est la <strong>liste de tous les slides</strong> du carrousel, remplis avec le modèle. Chaque ligne est un <code class="bg-stone-100 px-1 rounded">new Imagen(...)</code>. Les données du carrousel sont <strong>ici</strong>, pas dans les autres fichiers.</p>
+        <p class="mt-2 text-sm text-gray-600">Ce ne sont pas « seulement les fichiers .jpg » — c'est chaque <strong>écran complet</strong> du carrousel (image + textes).</p>
+      </div>
+
+      <div class="bg-white border border-stone-200 rounded-lg p-4 shadow-sm">
+        <h3 class="font-semibold text-amber-800 mb-2">carrousel.js — Les opérations</h3>
+        <p>C'est le fichier qui <strong>fait tourner</strong> le carrousel et <strong>affiche</strong> à l'écran. Il sait sur quel slide on est (0, 1, 2…), gère les boutons, l'autoplay, le thème, l'horloge, et met la bonne image et les bons textes dans la page.</p>
+      </div>
+    </div>
+
+    <table class="w-full bg-white shadow-sm rounded-lg overflow-hidden mb-6 text-sm">
+      <thead class="bg-stone-100">
+        <tr>
+          <th class="px-4 py-2 text-left border-b">Fichier</th>
+          <th class="px-4 py-2 text-left border-b">En une phrase</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b"><td class="px-4 py-2"><strong>claseImagen.js</strong></td><td class="px-4 py-2">Le modèle d'un slide</td></tr>
+        <tr class="border-b"><td class="px-4 py-2"><strong>datos.js</strong></td><td class="px-4 py-2">La liste des slides (<code>new Imagen</code>)</td></tr>
+        <tr><td class="px-4 py-2"><strong>carrousel.js</strong></td><td class="px-4 py-2">Le fonctionnement et l'affichage</td></tr>
+      </tbody>
+    </table>
+
+    <!-- SECTION 3 : Exemple City Hunter -->
+    <h2 class="text-xl font-semibold text-gray-700 mt-10 mb-4">3. Exemple : City Hunter (slide n° 1)</h2>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">claseImagen.js — le moule (pas encore City Hunter)</h3>
+    <pre class="bg-white border border-stone-200 rounded-lg p-4 text-sm overflow-x-auto mb-4"><code>class Imagen {
+  constructor(imagen, nombre, title, descripcion, puesto, episodios, ...) {
+    this.imagen = imagen;       // chemin de la photo
+    this.nombre = nombre;       // nom de l'anime
+    this.title = title;         // style / genre
+    this.descripcion = descripcion;
+    this.puesto = puesto;       // ex: "Anime 1"
+    this.episodios = episodios; // ex: 140
+  }
+}</code></pre>
+    <p class="mb-4 text-sm italic text-gray-600">Analogie : la fiche vide « Anime » avec les cases image, nom, style, description…</p>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">datos.js — City Hunter est créé ici</h3>
+    <pre class="bg-white border border-stone-200 rounded-lg p-4 text-sm overflow-x-auto mb-4"><code>new Imagen(
+  "img/1.jpg",
+  "City Hunter",
+  "Acción / Comedia / Detective",
+  "Acción, comedia y misterio...",
+  "Anime 1",
+  140
+),</code></pre>
+    <p class="mb-4 text-sm italic text-gray-600">Analogie : une fiche remplie pour City Hunter, rangée dans le tableau <code>imagenes</code> à la place n° 1.</p>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">carrousel.js — on affiche City Hunter</h3>
+    <ol class="list-decimal list-inside mb-4 space-y-1">
+      <li><code>indexActual = 1</code> (tu es au slide 1)</li>
+      <li><code>obtenerSlide(1)</code> → récupère City Hunter dans <code>imagenes[1]</code></li>
+      <li><code>actualizarPantalla()</code> met à jour la page : photo, nom, description, style, épisodes…</li>
+    </ol>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">Quand tu cliques sur › (depuis City Hunter)</h3>
+    <pre class="bg-stone-100 rounded-lg p-4 text-sm mb-4"><code>indexActual = 1  (City Hunter)
+      ↓
+ siguiente()
+      ↓
+indexActual = 2  (Space Adventure Cobra)
+      ↓
+ actualizarPantalla()
+      ↓
+L'écran montre Cobra (img/2.jpg, etc.)</code></pre>
+
+    <!-- SECTION 4 : Exemple Portada -->
+    <h2 class="text-xl font-semibold text-gray-700 mt-10 mb-4">4. Exemple : la portada (slide n° 0, sans image)</h2>
+
+    <p class="mb-3">C'est la <strong>première page</strong> du carrousel : texte de bienvenue, <strong>pas de photo</strong>.</p>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">claseImagen.js — méthode esIntro()</h3>
+    <pre class="bg-white border border-stone-200 rounded-lg p-4 text-sm overflow-x-auto mb-4"><code>esIntro() {
+  // C'est la portada si : pas d'image, pas de title, pas de parrafoExtra
+  if (this.imagen === "" && this.title === "" && this.parrafoExtra === "") {
+    esPortada = true;
+  }
+  return esPortada;
+}</code></pre>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">datos.js — la portada est le premier élément</h3>
+    <pre class="bg-white border border-stone-200 rounded-lg p-4 text-sm overflow-x-auto mb-4"><code>new Imagen(
+  "",
+  "Mapa del top 20 de mis animes japoneses preferidos",
+  "",
+  "Una exploración visual y técnica de las obras maestras..."
+),</code></pre>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">carrousel.js — affichage de la portada</h3>
+    <ol class="list-decimal list-inside mb-4 space-y-1">
+      <li><code>indexActual = 0</code></li>
+      <li><code>slide.esIntro()</code> → <strong>true</strong></li>
+      <li><code>pintarSlideIntro(slide)</code> : bloc texte visible, photo cachée, message « Pulsa › para comenzar »</li>
+    </ol>
+
+    <table class="w-full bg-white shadow-sm rounded-lg overflow-hidden mb-6 text-sm">
+      <thead class="bg-stone-100">
+        <tr>
+          <th class="px-4 py-2 text-left border-b"></th>
+          <th class="px-4 py-2 text-left border-b">Portada (slide 0)</th>
+          <th class="px-4 py-2 text-left border-b">City Hunter (slide 1)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b">
+          <td class="px-4 py-2"><strong>imagen</strong></td>
+          <td class="px-4 py-2"><code>""</code> (vide)</td>
+          <td class="px-4 py-2"><code>"img/1.jpg"</code></td>
+        </tr>
+        <tr class="border-b">
+          <td class="px-4 py-2"><strong>Affichage</strong></td>
+          <td class="px-4 py-2">Texte seulement</td>
+          <td class="px-4 py-2">Photo + infos en bas</td>
+        </tr>
+        <tr>
+          <td class="px-4 py-2"><strong>Fonction</strong></td>
+          <td class="px-4 py-2"><code>pintarSlideIntro()</code></td>
+          <td class="px-4 py-2"><code>pintarSlideAnime()</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SECTION 5 : Pourquoi if pour la intro -->
+    <h2 class="text-xl font-semibold text-gray-700 mt-10 mb-4">5. Pourquoi la intro utilise <code>if</code> et pas les autres de la même façon ?</h2>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">Dans datos.js : toutes pareilles</h3>
+    <p class="mb-3">Portada, anime et info sont toutes créées avec <code>new Imagen(...)</code>. Là, <strong>pas de if</strong>. L'exercice des classes est le même pour toutes.</p>
+
+    <h3 class="text-lg font-medium text-gray-600 mb-3">À l'écran : on ne peut pas tout afficher pareil</h3>
+    <p class="mb-3">Le HTML a <strong>deux modes</strong> différents :</p>
+    <ul class="list-disc list-inside mb-4 space-y-1">
+      <li><strong>Intro</strong> : texte seul, pas de photo, message « Pulsa › »</li>
+      <li><strong>Anime</strong> : grande photo + nom + description en bas</li>
+      <li><strong>Info</strong> : texte + paragraphe extra + lien Wikipedia</li>
+    </ul>
+
+    <p class="mb-3">On ne peut pas faire <code>carouselImg.src = slide.imagen</code> sur la portada car <code>imagen</code> est vide (<code>""</code>). On ne peut pas cacher la photo pour City Hunter car il <em>a</em> une image.</p>
+
+    <p class="mb-3">Donc dans <code>carrousel.js</code> :</p>
+    <pre class="bg-white border border-stone-200 rounded-lg p-4 text-sm overflow-x-auto mb-4"><code>if (slide.esIntro()) {
+  pintarSlideIntro(slide);    // seulement du texte
+} else if (slide.esInfo()) {
+  pintarSlideInfo(slide);     // texte + paragraphe + lien
+} else {
+  pintarSlideAnime(slide);    // photo + données de l'anime
+}</code></pre>
+
+    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+      <p class="font-medium mb-2">À retenir</p>
+      <ul class="list-disc list-inside space-y-1 text-sm">
+        <li>Le <code>if</code> n'est pas parce que la intro est différente <em>dans la classe</em> — c'est parce que <strong>l'affichage</strong> change.</li>
+        <li>Les animes passent par le <code>else</code> : « si ce n'est ni intro ni info, c'est un anime ».</li>
+        <li>Si tous les slides avaient la même mise en page, une seule fonction suffirait — pas besoin de <code>if</code>.</li>
+      </ul>
+    </div>
+
+    <!-- SECTION 6 : Bibliothèque de fonctions -->
+    <h2 class="text-xl font-semibold text-gray-700 mt-10 mb-4">6. Fonctions indépendantes — bibliothèque réutilisable</h2>
+
+    <p class="mb-3">Après la refactorisation de <code>carrousel.js</code>, certaines fonctions sont <strong>indépendantes</strong> : elles reçoivent des paramètres, renvoient un résultat avec <code>return</code>, et ne dépendent pas du HTML de ce projet. Tu peux les réutiliser dans un autre exercice, comme dans ta bibliothèque de fonctions.</p>
+
+    <h3 class="text-lg font-medium text-gray-600 mt-6 mb-3">Critères d'une fonction « bibliothèque »</h3>
+    <ul class="list-disc list-inside mb-4 space-y-1">
+      <li>Tout arrive par <strong>paramètres</strong></li>
+      <li>Le résultat sort par <strong>return</strong></li>
+      <li>Pas de <code>getElementById</code> ni de variables globales du projet (<code>imagenes</code>, <code>indexActual</code>…)</li>
+    </ul>
+
+    <h3 class="text-lg font-medium text-gray-600 mt-6 mb-3">Réutilisables dans n'importe quel exercice</h3>
+    <div class="overflow-x-auto mb-6">
+      <table class="w-full bg-white shadow-sm rounded-lg overflow-hidden text-sm">
+        <thead class="bg-stone-100">
+          <tr>
+            <th class="px-4 py-2 text-left border-b">Fonction</th>
+            <th class="px-4 py-2 text-left border-b">Entrée</th>
+            <th class="px-4 py-2 text-left border-b">Sortie</th>
+            <th class="px-4 py-2 text-left border-b">Usage ailleurs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b"><td class="px-4 py-2"><code>calcularIndiceCircular</code></td><td class="px-4 py-2">indice, total</td><td class="px-4 py-2">indice valide</td><td class="px-4 py-2">Carrousel, liste circulaire</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>calcularUltimoIndice</code></td><td class="px-4 py-2">total</td><td class="px-4 py-2">dernier indice</td><td class="px-4 py-2">Pagination, tableaux</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>calcularSiguienteIndice</code></td><td class="px-4 py-2">indice, total</td><td class="px-4 py-2">indice suivant</td><td class="px-4 py-2">Navigation</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>calcularAnteriorIndice</code></td><td class="px-4 py-2">indice, total</td><td class="px-4 py-2">indice précédent</td><td class="px-4 py-2">Navigation</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>calcularDesplazamientoAutoplay</code></td><td class="px-4 py-2">indice, dernier, sens, total</td><td class="px-4 py-2"><code>{ indice, sentido }</code></td><td class="px-4 py-2">Autoplay ping-pong</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>obtenerSlidePorIndice</code></td><td class="px-4 py-2">liste, indice</td><td class="px-4 py-2">élément</td><td class="px-4 py-2">N'importe quel tableau</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>formatearHora</code></td><td class="px-4 py-2"><code>Date</code></td><td class="px-4 py-2"><code>"HH:MM:SS"</code></td><td class="px-4 py-2">Horloge, affichage heure</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>obtenerTemaDesdeToggle</code></td><td class="px-4 py-2">booléen</td><td class="px-4 py-2"><code>light</code> / <code>night</code></td><td class="px-4 py-2">Thème jour/nuit</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>obtenerTemaGuardado</code></td><td class="px-4 py-2">clé</td><td class="px-4 py-2">thème</td><td class="px-4 py-2">localStorage</td></tr>
+          <tr class="border-b"><td class="px-4 py-2"><code>estaReproduciendoAutoplay</code></td><td class="px-4 py-2">intervalle ou <code>null</code></td><td class="px-4 py-2">booléen</td><td class="px-4 py-2">Tout timer</td></tr>
+          <tr><td class="px-4 py-2"><code>alternarGrupo</code></td><td class="px-4 py-2">élément DOM, booléen, classes</td><td class="px-4 py-2">—</td><td class="px-4 py-2">Changer classes CSS</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-medium text-gray-600 mt-6 mb-3">Réutilisables avec la classe <code>Imagen</code></h3>
+    <ul class="list-disc list-inside mb-4 space-y-1">
+      <li><code>obtenerTipoSlide(slide)</code> — besoin de <code>esIntro()</code> et <code>esInfo()</code></li>
+      <li><code>lineasCaracteristicas(slide)</code> — besoin de <code>title</code> et <code>episodios</code></li>
+    </ul>
+
+    <h3 class="text-lg font-medium text-gray-600 mt-6 mb-3">Fichier entier réutilisable</h3>
+    <ul class="list-disc list-inside mb-4 space-y-1">
+      <li><strong><code>claseImagen.js</code></strong> — oui, le moule pour un autre carrousel</li>
+      <li><strong><code>datos.js</code></strong> — non, ce sont tes 22 slides précis</li>
+    </ul>
+
+    <h3 class="text-lg font-medium text-gray-600 mt-6 mb-3">Pas bibliothèque (spécifiques à ce projet)</h3>
+    <p class="mb-3">Ces fonctions touchent le HTML de <em>cette</em> page ou les variables globales du carrousel :</p>
+    <p class="mb-4 text-sm"><code>main</code>, <code>pintarSlideIntro</code>, <code>pintarSlideAnime</code>, <code>manejarSiguiente</code>, <code>iniciarApp</code>, <code>enlazarEscuchadores</code>, <code>aplicarEstiloIntro</code>…</p>
+
+    <div class="bg-stone-100 rounded-lg p-4 mb-4 text-sm">
+      <p class="font-medium mb-2">Schéma</p>
+      <pre class="whitespace-pre-wrap"><code>RÉUTILISABLE (bibliothèque)     |  SEULEMENT CE PROJET
+calcularIndiceCircular          |  main()
+formatearHora                   |  pintarSlideAnime()
+claseImagen.js                  |  datos.js
+alternarGrupo                   |  manejarSiguiente()</code></pre>
+    </div>
+
+    <p class="mb-4 text-sm text-gray-600">Aujourd'hui ces fonctions sont dans <code>carrousel.js</code>, pas dans un fichier <code>biblioteca-funciones.js</code> séparé. Pour une vraie bibliothèque, il faudrait les extraire dans un fichier à part et les charger avant <code>carrousel.js</code>.</p>
+
+    <!-- SECTION 7 : Checklist -->
+    <h2 class="text-xl font-semibold text-gray-700 mt-10 mb-4">7. Est-ce que l'exercice est résolu ?</h2>
+
+    <ul class="space-y-2 mb-6">
+      <li class="flex items-start gap-2"><span class="text-green-600">✓</span> Classe <code>Imagen</code> dans <code>claseImagen.js</code></li>
+      <li class="flex items-start gap-2"><span class="text-green-600">✓</span> Données avec <code>new Imagen(...)</code> dans <code>datos.js</code></li>
+      <li class="flex items-start gap-2"><span class="text-green-600">✓</span> Plus d'ancien format <code>{ "Anime 1": { ... } }</code></li>
+      <li class="flex items-start gap-2"><span class="text-green-600">✓</span> Méthode <code>toString()</code> comme dans l'exemple <code>Alumno</code> de la prof</li>
+      <li class="flex items-start gap-2"><span class="text-green-600">✓</span> 3 fichiers JS comme le slide de cours</li>
+    </ul>
+
+    <p class="text-gray-600 text-sm border-t border-stone-200 pt-6">
+      Guide créé pour le projet du carrousel d'animes — Exercice : créer les objets du carrousel avec des classes.
+    </p>
+
+  </main>
+
+</body>
+</html>

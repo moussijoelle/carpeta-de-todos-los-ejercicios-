@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide — Galerie de photos avec API</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --muted: #5c5c6f;
+      --accent: #58008b;
+      --border: #e2e4ea;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    section h2 {
+      font-size: 1.35rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section h3 {
+      font-size: 1.1rem;
+      margin: 1.25rem 0 0.75rem;
+    }
+
+    p {
+      margin-bottom: 0.85rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f0f0f5;
+      color: var(--accent);
+    }
+
+    ul, ol {
+      margin: 0.75rem 0 0.75rem 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    blockquote {
+      border-left: 4px solid var(--accent);
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      background: #f5f0fa;
+      font-style: italic;
+    }
+
+    code {
+      background: #eee;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    a {
+      color: var(--accent);
+      word-break: break-word;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Galerie de photos avec API</h1>
+      <p>Guide explicatif — pour comprendre l'exercice sans connaissances en programmation</p>
+    </header>
+
+    <section>
+      <h2>En une phrase, c'est quoi ?</h2>
+      <p>
+        Tu dois créer une <strong>page web</strong> qui affiche des <strong>photos</strong> prises depuis
+        <strong>Internet</strong>, via une <strong>API</strong> — une sorte de « porte » qui te donne accès
+        à des images sans les télécharger toi-même.
+      </p>
+      <p>
+        C'est comme une <strong>vitrine de photos</strong> : tu tapes un mot (plage, voyage, chat…),
+        et la page te montre des images sur ce thème.
+      </p>
+    </section>
+
+    <section>
+      <h2>Les mots importants (version simple)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Mot</th>
+            <th>Explication simple</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Galerie de photos</strong></td>
+            <td>Une page avec plusieurs images disposées en grille, comme sur Instagram ou Pinterest.</td>
+          </tr>
+          <tr>
+            <td><strong>API</strong></td>
+            <td>Un service en ligne qui <strong>envoie</strong> des données à ton site. Ici : des photos.</td>
+          </tr>
+          <tr>
+            <td><strong>Responsiva</strong></td>
+            <td>La page s'adapte au téléphone, à la tablette et à l'ordinateur.</td>
+          </tr>
+          <tr>
+            <td><strong>HTML</strong></td>
+            <td>La structure de la page : titres, boutons, zones pour les images.</td>
+          </tr>
+          <tr>
+            <td><strong>CSS / Tailwind</strong></td>
+            <td>Le style : couleurs, tailles, mise en page.</td>
+          </tr>
+          <tr>
+            <td><strong>JavaScript</strong></td>
+            <td>La logique : quand tu cliques sur « Buscar », le site va chercher les photos.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Ce que demande l'exercice, concrètement</h2>
+      <ol>
+        <li>
+          <strong>Choisir une API gratuite de photos</strong><br>
+          → Tu as choisi <strong>Unsplash</strong> (photos de qualité, gratuites pour apprendre).
+        </li>
+        <li>
+          <strong>Faire une galerie 100 % responsiva</strong><br>
+          → Sur mobile : 1 colonne. Sur grand écran : plusieurs colonnes. Tout doit rester lisible et joli.
+        </li>
+        <li>
+          <strong>Utiliser l'API</strong><br>
+          → Ton site ne stocke pas les photos. Il <strong>demande</strong> à Unsplash :
+          « Donne-moi des photos de <em>plage</em> », et Unsplash répond avec une liste d'images.
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Comment ça marche, comme une histoire</h2>
+      <p>Imagine ta page comme un <strong>restaurant</strong> :</p>
+      <ol>
+        <li><strong>Le client</strong> (toi) écrit « voyage » dans la barre de recherche et clique sur <strong>Buscar</strong>.</li>
+        <li><strong>Le serveur</strong> (ton JavaScript) porte la commande à la <strong>cuisine</strong> (l'API Unsplash).</li>
+        <li><strong>La cuisine</strong> renvoie un plateau de photos sur le thème « voyage ».</li>
+        <li><strong>Le serveur</strong> les dispose joliment sur la <strong>table</strong> (la galerie à l'écran).</li>
+      </ol>
+      <p>
+        Si tu cliques sur <strong>Cargar más</strong>, le serveur redemande :
+        « Encore des photos, page suivante, s'il vous plaît. »
+      </p>
+    </section>
+
+    <section>
+      <h2>Ce que tu as dans ton projet</h2>
+      <p>Tu as <strong>deux fichiers principaux</strong> :</p>
+
+      <h3><code>index.html</code> — la « coquille » de la page</h3>
+      <ul>
+        <li>Le titre « Galería de Fotos »</li>
+        <li>La barre de recherche</li>
+        <li>L'endroit où les photos apparaissent</li>
+        <li>Le bouton jour / nuit</li>
+        <li>Le bouton « Cargar más »</li>
+      </ul>
+
+      <h3><code>js/app.js</code> — le « cerveau »</h3>
+      <p>C'est lui qui :</p>
+      <ul>
+        <li>parle à Unsplash ;</li>
+        <li>reçoit les photos ;</li>
+        <li>les affiche ;</li>
+        <li>gère la recherche, le chargement et le thème clair/sombre.</li>
+      </ul>
+
+      <p>Ton code est bien organisé :</p>
+      <ol>
+        <li>d'abord le <strong>DOM</strong> (les éléments de la page) ;</li>
+        <li>puis les <strong>variables</strong> ;</li>
+        <li>puis les <strong>fonctions</strong> ;</li>
+        <li>à la fin, <strong>l'exécution</strong> (<code>iniciarAplicacion()</code>).</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Pourquoi une « clé d'accès » (Access Key) ?</h2>
+      <p>
+        Unsplash veut savoir <strong>qui</strong> utilise son service. Ta <strong>Access Key</strong>,
+        c'est comme une <strong>carte d'identité</strong> de ton projet — pas ton mot de passe.
+      </p>
+      <p>Sans elle, la porte (l'API) ne s'ouvre pas.</p>
+    </section>
+
+    <section>
+      <h2>Ce que « responsiva » veut dire pour toi</h2>
+      <ul>
+        <li><strong>Téléphone</strong> : les photos sont les unes sous les autres.</li>
+        <li><strong>Tablette</strong> : 2 ou 3 colonnes.</li>
+        <li><strong>Ordinateur</strong> : jusqu'à 4 colonnes.</li>
+      </ul>
+      <p>
+        Tu n'as pas besoin de zoomer ou faire défiler horizontalement : tout s'adapte tout seul
+        grâce à <strong>Tailwind</strong>.
+      </p>
+    </section>
+
+    <section>
+      <h2>En résumé pour ton prof ou pour toi</h2>
+      <blockquote>
+        J'ai créé une galerie web responsive qui utilise l'API Unsplash. L'utilisateur peut chercher
+        un thème, voir les photos en grille, charger plus de résultats, et changer entre mode jour
+        et mode nuit. Le JavaScript est structuré avec des fonctions nommées et une séparation entre
+        la logique et l'affichage.
+      </blockquote>
+    </section>
+
+    <section>
+      <h2>Résumé des étapes réalisées</h2>
+
+      <h3>Objectif</h3>
+      <p>Créer une galerie web <strong>100 % responsive</strong> qui récupère des photos via une <strong>API publique et gratuite</strong>.</p>
+
+      <h3>Technologies choisies</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Partie</th>
+            <th>Technologie</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Structure</td>
+            <td>HTML</td>
+          </tr>
+          <tr>
+            <td>Styles</td>
+            <td>Tailwind CSS (CDN)</td>
+          </tr>
+          <tr>
+            <td>Logique</td>
+            <td>JavaScript</td>
+          </tr>
+          <tr>
+            <td>API</td>
+            <td>Unsplash</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Fichiers du projet</h3>
+      <ul>
+        <li><code>index.html</code> — page principale</li>
+        <li><code>js/app.js</code> — logique et connexion à l'API</li>
+        <li><code>guia.html</code> — ce guide explicatif</li>
+      </ul>
+
+      <h3>Étapes suivies</h3>
+      <ol>
+        <li>
+          <strong>Configurer Unsplash</strong> — inscription, confirmation de l'e-mail, création de l'application
+          « Galería fotos » et obtention de l'Access Key.
+        </li>
+        <li>
+          <strong>Créer <code>index.html</code></strong> — en-tête, barre de recherche, grille de photos,
+          bouton « Cargar más », mode jour/nuit et design responsive avec Tailwind.
+        </li>
+        <li>
+          <strong>Créer <code>js/app.js</code></strong> — connexion à l'API Unsplash pour chercher des photos
+          par thème et les afficher dans la galerie.
+        </li>
+        <li>
+          <strong>Corriger le bouton « Buscar »</strong> — ajout de l'Access Key et suppression de
+          <code>required</code> sur le champ de recherche.
+        </li>
+        <li>
+          <strong>Ajouter le thème jour / nuit</strong> — bouton qui change l'apparence et sauvegarde
+          la préférence dans <code>localStorage</code>.
+        </li>
+        <li>
+          <strong>Structurer le code</strong> — ordre : mapeo del DOM → variables → fonctions → exécution.
+          Fonctions nommées, indépendantes, et une seule (<code>actualizarInterfaz</code>) qui modifie le DOM.
+        </li>
+        <li>
+          <strong>Documenter</strong> — commentaires dans <code>app.js</code> et ce guide en français.
+        </li>
+      </ol>
+
+      <h3>Fonctionnalités finales</h3>
+      <ul>
+        <li>Recherche par thème (voyage, plage, architecture…)</li>
+        <li>Galerie responsive (1 à 4 colonnes selon l'écran)</li>
+        <li>« Cargar más » pour voir plus de photos</li>
+        <li>Mode jour et mode nuit</li>
+        <li>Nom de l'auteur sur chaque photo (exigence d'Unsplash)</li>
+      </ul>
+
+      <h3>Phrase pour rendre l'exercice</h3>
+      <blockquote>
+        J'ai créé une galerie web responsive avec HTML, Tailwind et JavaScript qui consomme l'API Unsplash.
+        L'utilisateur peut chercher des photos par thème, charger plus de résultats et basculer entre
+        le mode clair et le mode sombre. Le code est organisé avec des fonctions nommées et une séparation
+        entre la logique et la présentation.
+      </blockquote>
+    </section>
+
+    <section>
+      <h2>Ressources WordPress et Tailwind (liens fiables)</h2>
+      <p>
+        Liens officiels pour préparer les prochaines pratiques avec WordPress sur ton ordinateur
+        et Tailwind. Priorité : documentation officielle.
+      </p>
+
+      <h3>1. WordPress en local (sur ton ordinateur)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Ressource</th>
+            <th>Lien</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Local (gratuit, très utilisé)</td>
+            <td><a href="https://localwp.com/" target="_blank" rel="noopener noreferrer">https://localwp.com/</a></td>
+          </tr>
+          <tr>
+            <td>Aide de Local</td>
+            <td><a href="https://localwp.com/help-docs/" target="_blank" rel="noopener noreferrer">https://localwp.com/help-docs/</a></td>
+          </tr>
+          <tr>
+            <td>WordPress Studio (alternative officielle)</td>
+            <td><a href="https://developer.wordpress.com/studio/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.com/studio/</a></td>
+          </tr>
+          <tr>
+            <td>Documentation Studio</td>
+            <td><a href="https://developer.wordpress.com/docs/developer-tools/studio/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.com/docs/developer-tools/studio/</a></td>
+          </tr>
+          <tr>
+            <td>XAMPP</td>
+            <td><a href="https://www.apachefriends.org/" target="_blank" rel="noopener noreferrer">https://www.apachefriends.org/</a></td>
+          </tr>
+          <tr>
+            <td>Laragon (Windows)</td>
+            <td><a href="https://laragon.org/" target="_blank" rel="noopener noreferrer">https://laragon.org/</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2. Thème enfant (child theme)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Ressource</th>
+            <th>Lien</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Child Themes — WordPress officiel</td>
+            <td><a href="https://developer.wordpress.org/themes/advanced-topics/child-themes/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/themes/advanced-topics/child-themes/</a></td>
+          </tr>
+          <tr>
+            <td>style.css du thème enfant</td>
+            <td><a href="https://developer.wordpress.org/themes/classic-themes/basics/main-stylesheet-style-css/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/themes/classic-themes/basics/main-stylesheet-style-css/</a></td>
+          </tr>
+          <tr>
+            <td>Theme Handbook (index)</td>
+            <td><a href="https://developer.wordpress.org/themes/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/themes/</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>3. functions.php — charger CSS et JavaScript</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Ressource</th>
+            <th>Lien</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Custom Functionality (functions.php)</td>
+            <td><a href="https://developer.wordpress.org/themes/core-concepts/custom-functionality/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/themes/core-concepts/custom-functionality/</a></td>
+          </tr>
+          <tr>
+            <td>Including Assets (CSS et JS)</td>
+            <td><a href="https://developer.wordpress.org/themes/core-concepts/including-assets/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/themes/core-concepts/including-assets/</a></td>
+          </tr>
+          <tr>
+            <td>wp_enqueue_script() — référence</td>
+            <td><a href="https://developer.wordpress.org/reference/functions/wp_enqueue_script/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/reference/functions/wp_enqueue_script/</a></td>
+          </tr>
+          <tr>
+            <td>wp_enqueue_style() — référence</td>
+            <td><a href="https://developer.wordpress.org/reference/functions/wp_enqueue_style/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/reference/functions/wp_enqueue_style/</a></td>
+          </tr>
+          <tr>
+            <td>Encolar scripts (Plugin Handbook)</td>
+            <td><a href="https://developer.wordpress.org/plugins/javascript/enqueuing/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/plugins/javascript/enqueuing/</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4. Modèle de page personnalisé</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Ressource</th>
+            <th>Lien</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Page Templates (thèmes classiques)</td>
+            <td><a href="https://developer.wordpress.org/themes/classic-themes/templates/page-template-files/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/themes/classic-themes/templates/page-template-files/</a></td>
+          </tr>
+          <tr>
+            <td>Hiérarchie des modèles</td>
+            <td><a href="https://developer.wordpress.org/themes/basics/template-hierarchy/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/themes/basics/template-hierarchy/</a></td>
+          </tr>
+          <tr>
+            <td>Structure d'un thème</td>
+            <td><a href="https://developer.wordpress.org/themes/core-concepts/theme-structure/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/themes/core-concepts/theme-structure/</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>5. Tailwind CSS</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Ressource</th>
+            <th>Lien</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Play CDN — Tailwind officiel (v4)</td>
+            <td><a href="https://tailwindcss.com/docs/installation/play-cdn" target="_blank" rel="noopener noreferrer">https://tailwindcss.com/docs/installation/play-cdn</a></td>
+          </tr>
+          <tr>
+            <td>Play CDN Tailwind v3 (comme ta galería)</td>
+            <td><a href="https://v3.tailwindcss.com/docs/installation/play-cdn" target="_blank" rel="noopener noreferrer">https://v3.tailwindcss.com/docs/installation/play-cdn</a></td>
+          </tr>
+          <tr>
+            <td>Documentation Tailwind</td>
+            <td><a href="https://tailwindcss.com/docs" target="_blank" rel="noopener noreferrer">https://tailwindcss.com/docs</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>6. Apprendre WordPress (officiel)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Ressource</th>
+            <th>Lien</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Learn WordPress (cours gratuits)</td>
+            <td><a href="https://learn.wordpress.org/" target="_blank" rel="noopener noreferrer">https://learn.wordpress.org/</a></td>
+          </tr>
+          <tr>
+            <td>Documentation développeurs</td>
+            <td><a href="https://developer.wordpress.org/" target="_blank" rel="noopener noreferrer">https://developer.wordpress.org/</a></td>
+          </tr>
+          <tr>
+            <td>Documentation générale</td>
+            <td><a href="https://wordpress.org/documentation/" target="_blank" rel="noopener noreferrer">https://wordpress.org/documentation/</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Ordre recommandé pour tes vidéos / lectures</h3>
+      <ol>
+        <li>WordPress en local (Local ou ton outil)</li>
+        <li>Thème enfant</li>
+        <li><code>functions.php</code> et encolar scripts</li>
+        <li>Modèle de page personnalisé</li>
+        <li>Tailwind CDN (tu le connais déjà grâce à la galería)</li>
+      </ol>
+
+      <h3>Vidéos YouTube recommandées</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Sujet</th>
+            <th>Vidéo</th>
+            <th>Langue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Thème enfant (concept)</td>
+            <td><a href="https://www.youtube.com/watch?v=8qoDWAHAnc4" target="_blank" rel="noopener noreferrer">¿Qué es un Tema Hijo de WordPress?</a> — Academia de Hostinger</td>
+            <td>ES</td>
+          </tr>
+          <tr>
+            <td>Thème enfant (pas à pas)</td>
+            <td><a href="https://www.youtube.com/watch?v=ZBoW1PtcURo" target="_blank" rel="noopener noreferrer">WordPress Child Theme</a> — WPLearningLab</td>
+            <td>EN</td>
+          </tr>
+          <tr>
+            <td><code>wp_enqueue_script</code> dans <code>functions.php</code></td>
+            <td><a href="https://www.youtube.com/watch?v=26SLt4W1pcY" target="_blank" rel="noopener noreferrer">Use WP Enqueue Script</a> — WPLearningLab</td>
+            <td>EN</td>
+          </tr>
+          <tr>
+            <td>WordPress en local</td>
+            <td><a href="https://www.youtube.com/watch?v=CldiQD8Va6A" target="_blank" rel="noopener noreferrer">Cómo Usar Local WP</a> — Sebasweb</td>
+            <td>ES</td>
+          </tr>
+          <tr>
+            <td>Modèle de page personnalisé</td>
+            <td><a href="https://www.youtube.com/watch?v=1ZdHI8HuboA" target="_blank" rel="noopener noreferrer">How to Create a Custom Page in WordPress</a> — WPBeginner</td>
+            <td>EN</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Vidéos YouTube en français</h3>
+      <p>Même ordre que ci-dessus — utile si tu préfères écouter en français.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Sujet</th>
+            <th>Vidéo</th>
+            <th>Chaîne</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>WordPress en local (LocalWP)</td>
+            <td><a href="https://www.youtube.com/watch?v=bJ7OgckOLxg" target="_blank" rel="noopener noreferrer">Créer un Site WordPress Gratuitement Sans Hébergement</a></td>
+            <td>Keziah NIVELLE — Palmsquare</td>
+          </tr>
+          <tr>
+            <td>Thème enfant (concept)</td>
+            <td><a href="https://www.youtube.com/watch?v=dOO2mHFltaM" target="_blank" rel="noopener noreferrer">Le thème enfant sur WordPress : pourquoi c'est INDISPENSABLE</a></td>
+            <td>Cédric Chevillard — Linkara</td>
+          </tr>
+          <tr>
+            <td>Thème enfant (pas à pas, manuel)</td>
+            <td><a href="https://www.youtube.com/watch?v=qCm5uH9Xj5Q" target="_blank" rel="noopener noreferrer">Comment créer un thème enfant sur WordPress ?</a></td>
+            <td>WP Sensei</td>
+          </tr>
+          <tr>
+            <td>Thème enfant (pas à pas, plugin)</td>
+            <td><a href="https://www.youtube.com/watch?v=rHzBRnTwS7I" target="_blank" rel="noopener noreferrer">Créer un THEME ENFANT Wordpress en 3min</a></td>
+            <td>Enzo — Les WebMasters 2.0</td>
+          </tr>
+          <tr>
+            <td><code>wp_enqueue_script</code> / charger CSS &amp; JS</td>
+            <td><a href="https://www.youtube.com/playlist?list=PL-0MHjzdA9EwK5_LXDiI2NUH2uW4dMd24" target="_blank" rel="noopener noreferrer">Thème WordPress — saison 7 (Bootstrap 4)</a></td>
+            <td>Lionel Gibaudan</td>
+          </tr>
+          <tr>
+            <td>Modèle de page personnalisé</td>
+            <td><a href="https://www.youtube.com/playlist?list=PL-0MHjzdA9ExDEJOxZijp-FJwM5RjeS0S" target="_blank" rel="noopener noreferrer">Thème WordPress — saison 8 (formulaire custom)</a></td>
+            <td>Lionel Gibaudan</td>
+          </tr>
+          <tr>
+            <td>Formation WordPress générale</td>
+            <td><a href="https://www.youtube.com/watch?v=jbcnrgqDsGQ" target="_blank" rel="noopener noreferrer">Formation WordPress 2026 : Créez votre site de A à Z</a></td>
+            <td>Alexis FH</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      Exercice 14.3 — Galería de Fotos con API Unsplash
+    </footer>
+  </div>
+</body>
+</html>

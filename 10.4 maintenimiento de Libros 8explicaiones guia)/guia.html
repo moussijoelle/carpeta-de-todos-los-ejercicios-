@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide — Mantenimiento de Libros (CRUD)</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+    main { max-width: 960px; margin: 0 auto; padding: 28px 18px 64px; }
+    h1 { font-size: 1.7rem; margin: 0 0 10px; }
+    h2 { font-size: 1.25rem; margin: 32px 0 12px; border-bottom: 1px solid rgba(127,127,127,.3); padding-bottom: 6px; }
+    h3 { font-size: 1.05rem; margin: 20px 0 8px; }
+    p { margin: 10px 0; }
+    ul, ol { margin: 10px 0 10px 22px; }
+    li { margin: 4px 0; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.92em; }
+    pre { padding: 14px 16px; border-radius: 10px; overflow: auto; border: 1px solid rgba(127,127,127,.35); font-size: 0.88rem; line-height: 1.45; }
+    .muted { opacity: 0.85; }
+    .tag { display: inline-block; padding: 2px 10px; border-radius: 999px; border: 1px solid rgba(127,127,127,.35); font-size: 0.82rem; margin-right: 6px; }
+    .card { border: 1px solid rgba(127,127,127,.3); border-radius: 12px; padding: 16px 18px; margin: 14px 0; }
+    .card.simple { background: rgba(59,130,246,.08); }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.95rem; }
+    th, td { border: 1px solid rgba(127,127,127,.35); padding: 8px 12px; text-align: left; }
+    th { background: rgba(127,127,127,.12); }
+    nav.top { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 24px; }
+    nav.top a { font-size: 0.88rem; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(127,127,127,.35); text-decoration: none; color: inherit; }
+    nav.top a:hover { background: rgba(127,127,127,.12); }
+    .flow { font-family: ui-monospace, monospace; font-size: 0.82rem; white-space: pre; overflow-x: auto; padding: 14px; border-radius: 10px; border: 1px solid rgba(127,127,127,.35); }
+    .link-app { display: inline-block; margin-top: 8px; padding: 8px 16px; border-radius: 8px; background: #2563eb; color: #fff; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .link-app:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Guide complet — Mantenimiento de Libros</h1>
+    <p class="muted">
+      Explication pas à pas de l'exercice CRUD de ta prof. Écrit pour quelqu'un qui débute en programmation.
+      Le code de l'application est en espagnol ; cette guide est en français.
+    </p>
+    <a class="link-app" href="index.html">Ouvrir l'application →</a>
+
+    <nav class="top">
+      <a href="#crud">CRUD</a>
+      <a href="#isbn">ISBN</a>
+      <a href="#fieldset">Fieldset</a>
+      <a href="#structure">Structure fichiers</a>
+      <a href="#html">HTML</a>
+      <a href="#clase">clase.libro.js</a>
+      <a href="#libros">libros.js</a>
+      <a href="#main">main.js</a>
+      <a href="#flux">Flux complet</a>
+      <a href="#concepts">Concepts clés</a>
+    </nav>
+
+    <!-- CRUD -->
+    <h2 id="crud">1. En quoi consiste l'exercice ?</h2>
+    <p>
+      Imagine que tu gères une petite librairie sur ton ordinateur. Tu as une liste de livres et tu veux pouvoir
+      <strong>les ajouter, les modifier, les supprimer et les consulter</strong>.
+    </p>
+    <p>C'est ce qu'on appelle un <strong>CRUD</strong> :</p>
+    <table>
+      <thead>
+        <tr><th>Lettre</th><th>Mot espagnol</th><th>Signification</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>C</strong></td><td>Crear</td><td>Créer — ajouter un livre</td></tr>
+        <tr><td><strong>R</strong></td><td>Leer</td><td>Lire — afficher un livre</td></tr>
+        <tr><td><strong>U</strong></td><td>Actualizar</td><td>Mettre à jour — modifier stock et prix</td></tr>
+        <tr><td><strong>D</strong></td><td>Borrar</td><td>Supprimer — effacer un livre</td></tr>
+      </tbody>
+    </table>
+    <p>Chaque livre a :</p>
+    <ul>
+      <li><strong>ISBN</strong> — identifiant unique (comme un DNI)</li>
+      <li><strong>Título</strong> — titre</li>
+      <li><strong>Autor</strong> — auteur</li>
+      <li><strong>Stock</strong> — nombre d'exemplaires</li>
+      <li><strong>Precio</strong> — prix en euros</li>
+    </ul>
+    <p>Au départ, 2 livres sont déjà en mémoire. L'utilisateur choisit une opération en haut, tape un ISBN, et le programme réagit.</p>
+
+    <!-- ISBN -->
+    <h2 id="isbn">2. Qu'est-ce que l'ISBN ? (explication simple)</h2>
+    <div class="card simple">
+      <p><strong>ISBN</strong> = <em>International Standard Book Number</em> → le <strong>DNI du livre</strong>.</p>
+      <table>
+        <thead>
+          <tr><th>Dans la vie réelle</th><th>Dans l'exercice</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Chaque personne a un DNI unique</td><td>Chaque livre a un ISBN unique</td></tr>
+          <tr><td>Sert à identifier quelqu'un</td><td>Sert à trouver un livre dans la liste</td></tr>
+        </tbody>
+      </table>
+      <p>Exemple : <code>978-0307474728</code> → <em>Cien años de soledad</em> de Gabriel García Márquez.</p>
+      <p><strong>À quoi sert-il ici ?</strong></p>
+      <ol>
+        <li>Tu écris l'ISBN dans le formulaire.</li>
+        <li>Le programme <strong>cherche</strong> si un livre avec cet ISBN existe déjà.</li>
+        <li>Selon le mode (ajouter, modifier, supprimer, afficher), il fait une chose différente.</li>
+      </ol>
+      <p class="muted">C'est pour ça que l'ISBN est <strong>en dehors</strong> du fieldset : c'est la clé de recherche, traitée à part.</p>
+    </div>
+
+    <!-- FIELDSET -->
+    <h2 id="fieldset">3. Qu'est-ce qu'un <code>fieldset</code> ? (explication simple)</h2>
+    <div class="card simple">
+      <p>Un <code>fieldset</code> est une <strong>boîte qui regroupe plusieurs champs</strong> d'un formulaire.</p>
+      <pre>┌─ Données du livre ─────────────┐
+│  Título:  [________]            │
+│  Autor:   [________]            │
+│  Stock:   [____]  Precio: [____]│
+└─────────────────────────────────┘</pre>
+      <p>Dans l'exercice, le <code>fieldset id="campos-libro"</code> regroupe : titre, auteur, stock et prix.</p>
+      <p><strong>Pourquoi <code>disabled</code> ?</strong></p>
+      <ul>
+        <li><code>disabled</code> = bloqué, on ne peut pas écrire.</li>
+        <li>Au début, tout le groupe est fermé.</li>
+        <li>Quand tu choisis une opération et tapes l'ISBN, le JavaScript ouvre les champs nécessaires.</li>
+        <li>C'est plus simple de bloquer/débloquer <strong>tout le groupe</strong> que chaque champ un par un.</li>
+      </ul>
+      <p><strong>Attribut <code>data-info</code> :</strong></p>
+      <table>
+        <thead>
+          <tr><th>Valeur</th><th>Champs</th><th>En mode MODIFICAR (2)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>fijo</code></td><td>título, autor</td><td>Bloqués — on ne change pas le titre ni l'auteur</td></tr>
+          <tr><td><code>modificable</code></td><td>stock, precio</td><td>Ouverts — seuls le stock et le prix changent</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- STRUCTURE -->
+    <h2 id="structure">4. Comment ta prof organise les fichiers</h2>
+    <pre>┌─────────────────────────────────────────────────────────┐
+│  index.html       →  Ce que l'utilisateur VOIT          │
+│  (la vitrine)          boutons, formulaire, messages    │
+├─────────────────────────────────────────────────────────┤
+│  clase.libro.js   →  Le MODÈLE du livre                 │
+│  (la fiche type)       qu'est-ce qu'un livre ?          │
+├─────────────────────────────────────────────────────────┤
+│  libros.js        →  La BASE DE DONNÉES                  │
+│  (le stockage)         la liste des livres              │
+├─────────────────────────────────────────────────────────┤
+│  main.js          →  Le CERVEAU                         │
+│  (la logique)          relie boutons ↔ données          │
+└─────────────────────────────────────────────────────────┘</pre>
+    <p><strong>Sa méthode de pensée :</strong></p>
+    <ol>
+      <li>D'abord définir <strong>ce qu'est un livre</strong> (classe)</li>
+      <li>Ensuite créer <strong>où on stocke les livres</strong> (tableau)</li>
+      <li>Puis construire <strong>l'interface</strong> (HTML)</li>
+      <li>Enfin écrire <strong>la logique</strong> qui connecte tout (main.js)</li>
+    </ol>
+
+    <!-- HTML -->
+    <h2 id="html">5. Explication du HTML (<code>index.html</code>)</h2>
+
+    <h3>En-tête (head)</h3>
+    <ul>
+      <li><code>&lt;!DOCTYPE html&gt;</code> — dit au navigateur que c'est une page web moderne.</li>
+      <li><code>charset UTF-8</code> — affiche correctement les accents (á, ñ, é…).</li>
+      <li><code>viewport</code> — la page s'adapte aux téléphones.</li>
+      <li><strong>Tailwind CSS</strong> — bibliothèque de styles. Les classes comme <code>bg-blue-600</code> viennent de là.</li>
+    </ul>
+
+    <h3>Barre de navigation (4 boutons)</h3>
+    <table>
+      <thead>
+        <tr><th>Bouton</th><th>id</th><th>operacionActual</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1. AGREGAR</td><td><code>btn-agregar</code></td><td>1</td></tr>
+        <tr><td>2. MODIFICAR</td><td><code>btn-modificar</code></td><td>2</td></tr>
+        <tr><td>3. ELIMINAR</td><td><code>btn-eliminar</code></td><td>3</td></tr>
+        <tr><td>4. MOSTRAR</td><td><code>btn-mostrar</code></td><td>4</td></tr>
+      </tbody>
+    </table>
+    <p>Le HTML prépare les boutons. Le JavaScript décide ce qu'ils font via la variable <code>operacionActual</code>.</p>
+
+    <h3>Indicateur de mode</h3>
+    <p><code>id="estado-operacion"</code> — message qui change selon le mode : « MODO: 1. AGREGAR LIBRO », etc. L'utilisateur sait toujours où il en est.</p>
+
+    <h3>Formulaire</h3>
+    <ul>
+      <li><code>id="isbn"</code> — champ clé, <code>disabled</code> au départ. Activé quand on choisit une opération.</li>
+      <li><code>id="campos-libro"</code> — fieldset avec titre, auteur, stock, prix.</li>
+      <li><code>id="acciones-formulario"</code> — boutons Guardar / Cancelar, cachés (<code>hidden</code>) au début.</li>
+      <li><code>id="dialog-informativo"</code> — fenêtre popup pour les messages (succès, erreur…).</li>
+    </ul>
+
+    <h3>Ordre des scripts (important)</h3>
+    <pre><code>&lt;script src="./js/clase-libro.js"&gt;&lt;/script&gt;  &lt;!-- 1. le modèle --&gt;
+&lt;script src="./js/libros.js"&gt;&lt;/script&gt;         &lt;!-- 2. les données --&gt;
+&lt;script src="./js/main.js"&gt;&lt;/script&gt;           &lt;!-- 3. la logique --&gt;</code></pre>
+    <p class="muted">Note : le fichier classe s'appelle <code>clase.libro.js</code> à la racine du projet. Vérifie que le chemin dans <code>index.html</code> pointe vers le bon fichier.</p>
+
+    <!-- CLASE -->
+    <h2 id="clase">6. Explication de <code>clase.libro.js</code></h2>
+    <p>Une <strong>classe</strong> = un moule. Chaque livre est fabriqué avec ce moule.</p>
+
+    <h3>Champs privés (<code>#</code>)</h3>
+    <pre><code>class Libro {
+  #isbn;
+  #titulo;
+  #autor;
+  #stock;
+  #precio;
+}</code></pre>
+    <p>Le <code>#</code> = <strong>privé</strong>. On ne peut pas modifier directement de l'extérieur. Seuls les getters et méthodes y accèdent. C'est l'<strong>encapsulation</strong>.</p>
+
+    <h3>Constructeur</h3>
+    <pre><code>constructor(isbn, titulo, autor, stock, precio) {
+  this.#isbn = isbn.trim();
+  ...
+}</code></pre>
+    <p><code>new Libro("978-...", "Cien años...", "García Márquez", 15, 19.99)</code> remplit les 5 propriétés. <code>trim()</code> enlève les espaces autour de l'ISBN.</p>
+
+    <h3>Getters</h3>
+    <pre><code>getIsbn()  { return this.#isbn; }
+getTitulo() { return this.#titulo; }
+...</code></pre>
+    <p>Pour <strong>lire</strong> les valeurs sans les exposer directement.</p>
+
+    <h3>Méthode de modification</h3>
+    <pre><code>actualizarStockYPrecio(nuevoStock, nuevoPrecio) {
+  this.#stock = parseInt(nuevoStock);
+  this.#precio = parseFloat(nuevoPrecio);
+}</code></pre>
+    <ul>
+      <li><code>parseInt</code> → nombre entier (15 unités)</li>
+      <li><code>parseFloat</code> → nombre décimal (19.99 €)</li>
+    </ul>
+    <p>Seule façon autorisée de modifier stock et prix en mode MODIFICAR.</p>
+
+    <h3>toString()</h3>
+    <p>Transforme le livre en texte : <code>ISBN: 978-... | Título: Cien años... | Precio: €19.99</code></p>
+
+    <!-- LIBROS -->
+    <h2 id="libros">7. Explication de <code>libros.js</code></h2>
+    <pre><code>const baseDatosLibros = [
+  new Libro("978-0307474728", "Cien años de soledad", "Gabriel García Márquez", 15, 19.99),
+  new Libro("978-0399589430", "Breves respuestas...", "Stephen Hawking", 8, 14.50)
+]</code></pre>
+    <ul>
+      <li><code>baseDatosLibros</code> = un <strong>tableau</strong> qui simule une base de données.</li>
+      <li>Chaque élément est un objet <code>Libro</code>.</li>
+      <li><code>console.table()</code> affiche joliment la liste dans la console (F12).</li>
+      <li>Tout est en <strong>mémoire</strong> : si tu recharges la page, tu retrouves les 2 livres de départ.</li>
+    </ul>
+
+    <!-- MAIN -->
+    <h2 id="main">8. Explication de <code>main.js</code> — le cerveau</h2>
+    <p>Ta prof structure le fichier en <strong>blocs séparés</strong> par des lignes <code>//-----</code>.</p>
+
+    <h3>Variables d'état globales</h3>
+    <table>
+      <thead>
+        <tr><th>Variable</th><th>Rôle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>operacionActual</code></td><td>1, 2, 3 ou 4 selon le bouton cliqué</td></tr>
+        <tr><td><code>posicionLibro</code></td><td>Index du livre dans le tableau, ou <code>-1</code> si introuvable</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Mappage du DOM</h3>
+    <pre><code>const btnAgregar = document.getElementById('btn-agregar');
+const inputIsbn = document.getElementById('isbn');
+...</code></pre>
+    <p>Le <strong>DOM</strong> = la page HTML en objets JavaScript. Ta prof crée des raccourcis pour ne pas répéter <code>document.getElementById</code> partout.</p>
+
+    <h3>Fonctions utilitaires</h3>
+    <div class="card">
+      <p><strong><code>mostrarAviso(titulo, mensaje)</code></strong> — affiche la fenêtre popup.</p>
+      <p><strong><code>gestionarPermisosCampos(operacion)</code></strong> — cœur des permissions :</p>
+      <ul>
+        <li>Opération 3 ou 4 → tout le fieldset bloqué</li>
+        <li>Opération 1 → tous les champs ouverts</li>
+        <li>Opération 2 → seuls stock et prix modifiables</li>
+      </ul>
+      <p><strong><code>resetearFormulario()</code></strong> — remet tout à zéro.</p>
+    </div>
+
+    <h3>Recherche par ISBN</h3>
+    <pre><code>const buscarLibroPorIsbn = (isbnValue) => {
+  let i = 0;
+  while (i &lt; baseDatosLibros.length &amp;&amp; !encontrado) {
+    if (isbnValue === baseDatosLibros[i].getIsbn()) {
+      indice = i;
+      encontrado = true;
+    }
+    i++;
+  }
+  posicionLibro = indice;
+}</code></pre>
+    <p>Parcourt le tableau avec une boucle <code>while</code> jusqu'à trouver l'ISBN ou atteindre la fin.</p>
+
+    <h3>Les 4 opérations CRUD</h3>
+    <table>
+      <thead>
+        <tr><th>Fonction</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>mostrarLibroEnFormulario</code></td><td>Remplit les champs avec les données du livre trouvé</td></tr>
+        <tr><td><code>guardarLibroEnFormulario</code></td><td><code>new Libro(...)</code> + <code>.push()</code> dans le tableau</td></tr>
+        <tr><td><code>modificarLibroEnFormulario</code></td><td>Appelle <code>actualizarStockYPrecio()</code></td></tr>
+        <tr><td><code>eliminarLibroEnFormulario</code></td><td><code>.splice(posicionLibro, 1)</code> — supprime 1 élément</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Pattern des 4 boutons du menu</h3>
+    <p>Chaque bouton (agregar, modificar, eliminar, mostrar) fait la même chose :</p>
+    <ol>
+      <li><code>operacionActual = X</code></li>
+      <li><code>resetearFormulario()</code></li>
+      <li><code>inputIsbn.disabled = false</code></li>
+      <li><code>inputIsbn.focus()</code> — curseur dans le champ ISBN</li>
+      <li>Change le texte de <code>estado-operacion</code></li>
+    </ol>
+
+    <h3>Soumission du formulaire</h3>
+    <pre><code>const procesarEnvio = (e) => {
+  e.preventDefault();
+  switch (operacionActual) {
+    case 1: guardarLibroEnFormulario(); break;
+    case 2: modificarLibroEnFormulario(); break;
+    case 3: eliminarLibroEnFormulario(); break;
+    case 4: mostrarLibroEnFormulario(); break;
+  }
+  resetearFormulario();
+}</code></pre>
+    <p><code>e.preventDefault()</code> empêche le navigateur de recharger la page. Le <code>switch</code> dirige vers la bonne fonction.</p>
+
+    <h3>Touche Entrée sur l'ISBN</h3>
+    <p>Quand tu appuies sur <strong>Entrée</strong> dans le champ ISBN :</p>
+    <ol>
+      <li>Cherche le livre</li>
+      <li>Si trouvé → affiche ses données</li>
+      <li>Ajuste les permissions selon l'opération</li>
+      <li>Montre les boutons Guardar / Cancelar</li>
+    </ol>
+
+    <!-- FLUX -->
+    <h2 id="flux">9. Parcours complet — exemple mode MODIFICAR</h2>
+    <div class="flow">1. Clic sur "2. MODIFICAR"     → operacionActual = 2
+2. Tape 978-0307474728 + Entrée  → buscarLibroPorIsbn()
+3. Livre trouvé                  → mostrarLibroEnFormulario()
+4. Título et Autor grisés        → data-info="fijo"
+5. Stock et Precio modifiables   → data-info="modificable"
+6. Change le prix à 22.00
+7. Clic "Guardar Cambios"        → modificarLibroEnFormulario()
+8. Message "Éxito"               → resetearFormulario()</div>
+
+  <h2 id="concepts">10. Concepts que ta prof veut t'enseigner</h2>
+    <table>
+      <thead>
+        <tr><th>Concept</th><th>Où on le voit</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Séparation des fichiers</td><td>HTML / classe / données / logique</td></tr>
+        <tr><td>Classe et encapsulation</td><td><code>#</code> privé + getters + méthodes</td></tr>
+        <tr><td>Tableau comme base de données</td><td><code>baseDatosLibros[]</code></td></tr>
+        <tr><td>État de l'application</td><td><code>operacionActual</code>, <code>posicionLibro</code></td></tr>
+        <tr><td>DOM et événements</td><td><code>addEventListener</code>, <code>getElementById</code></td></tr>
+        <tr><td>Permissions dynamiques</td><td><code>disabled</code>, <code>data-info</code></td></tr>
+        <tr><td>CRUD complet</td><td>push, modifier, splice, afficher</td></tr>
+        <tr><td>Switch pour router</td><td><code>procesarEnvio</code></td></tr>
+        <tr><td>UX</td><td>messages d'état, modale, champs intelligents</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card" style="margin-top: 32px;">
+      <h3 style="margin-top: 0;">Résumé en une phrase</h3>
+      <p>
+        C'est une mini-application de gestion de librairie où l'interface HTML collecte les données,
+        la classe <code>Libro</code> définit ce qu'est un livre, le tableau <code>baseDatosLibros</code> les stocke,
+        et <code>main.js</code> orchestre les 4 opérations CRUD selon le mode choisi.
+      </p>
+    </div>
+
+    <p style="margin-top: 24px;">
+      <a class="link-app" href="index.html">← Retour à l'application</a>
+    </p>
+  </main>
+</body>
+</html>

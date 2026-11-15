@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <script>
+    const temaGuardado = localStorage.getItem("tema");
+    if (temaGuardado === "dark") {
+      document.documentElement.classList.add("dark");
+    }
+  </script>
+
+  <style type="text/tailwindcss">
+    @import "tailwindcss";
+    @custom-variant dark (&:where(.dark, .dark *));
+
+    @layer base {
+      :root {
+        @apply text-sm;
+        line-height: 1.6;
+      }
+
+      p {
+        @apply mb-2;
+      }
+
+      button {
+        @apply rounded-md border border-slate-400 px-4 py-2 my-1 text-sm cursor-pointer disabled:opacity-50 transition hover:opacity-90;
+      }
+
+      input {
+        @apply border border-slate-300 rounded-md px-3 py-2 w-full dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100;
+      }
+
+      ol {
+        @apply list-decimal list-outside ml-6 mb-4 space-y-2;
+      }
+
+      kbd, code, a {
+        @apply text-blue-800 dark:text-blue-300;
+      }
+    }
+  </style>
+
+  <link rel="shortcut icon" href="shopping-cart.svg" type="image/svg+xml">
+  <title>🍅 Compras</title>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-100 to-white dark:from-slate-900 dark:to-slate-800 dark:text-slate-100">
+  <main class="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8">
+
+    <header class="mb-8 flex flex-wrap items-start justify-between gap-4">
+      <h1 class="font-bold text-2xl sm:text-3xl md:text-4xl leading-tight text-center md:text-left flex-1 min-w-0">
+        😊 Compra Sin Drama — tu lista de compra 🛒
+      </h1>
+
+      <button
+        type="button"
+        id="btn-tema"
+        class="shrink-0 bg-slate-600 text-white border-slate-700 px-3 py-2"
+        aria-label="Cambiar tema"
+        title="Cambiar tema"
+      >
+        <svg id="icono-sol" class="size-6 fill-current text-amber-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.36Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41l-.71.71a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/>
+        </svg>
+        <svg id="icono-luna" class="size-6 fill-current text-indigo-300 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>
+        </svg>
+      </button>
+    </header>
+
+    <section
+      class="bg-white/80 backdrop-blur rounded-xl border border-slate-200 p-4 sm:p-6 shadow-sm mb-6 dark:bg-slate-800/80 dark:border-slate-600"
+      aria-label="Añadir producto"
+    >
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+        <div class="sm:col-span-2 lg:col-span-1">
+          <label class="block font-medium mb-1" for="producto-input">Producto</label>
+          <input type="text" id="producto-input" placeholder="Ej: Pan" autocomplete="off">
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1" for="cantidad-input">Cantidad</label>
+          <input type="number" id="cantidad-input" min="1" value="1" placeholder="1">
+        </div>
+
+        <div>
+          <label class="block font-medium mb-1" for="precio-input">Precio estimado (€)</label>
+          <input type="number" id="precio-input" min="0" step="0.01" placeholder="0.00">
+        </div>
+
+        <button type="button" id="btn-agregar" class="w-full bg-blue-600 text-white border-blue-700">
+          Agregar
+        </button>
+      </div>
+    </section>
+
+    <section class="flex flex-col sm:flex-row flex-wrap gap-2 mb-6">
+      <button type="button" id="btn-calcular" class="bg-emerald-600 text-white border-emerald-700">
+        Calcular estimado a gastar
+      </button>
+      <button type="button" id="btn-vaciar" class="bg-red-600 text-white border-red-700">
+        Vaciar carrito
+      </button>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+      <article class="bg-white rounded-xl border border-slate-200 p-4 min-h-[200px] dark:bg-slate-800 dark:border-slate-600">
+        <h2 class="font-semibold text-lg mb-3">Tu lista</h2>
+        <ol id="lista-compras" class="text-slate-800 dark:text-slate-200"></ol>
+        <p id="mensaje" class="italic text-slate-600 dark:text-slate-400 mt-4 min-h-[1.5rem]">&nbsp;</p>
+      </article>
+
+      <aside class="text-center bg-white rounded-xl border border-slate-200 p-4 dark:bg-slate-800 dark:border-slate-600">
+        <img
+          class="mx-auto w-full max-w-xs sm:max-w-sm"
+          src="img/compra.webp"
+          alt="Ilustración de un carrito de la compra"
+        >
+        <p class="mt-4">
+          Productos en el carrito:
+          <span class="font-bold text-red-700" id="num-prod">0</span>
+        </p>
+        <p class="mt-4 text-base text-slate-700 dark:text-slate-300">
+          Total estimado a gastar:
+        </p>
+        <p class="text-3xl sm:text-4xl font-bold text-emerald-600 dark:text-emerald-400" id="total-estimado">
+          0,00 €
+        </p>
+      </aside>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

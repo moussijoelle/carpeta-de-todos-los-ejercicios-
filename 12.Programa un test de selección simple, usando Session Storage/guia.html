@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía — Persistencia en el Navegador</title>
+  <style>
+    :root {
+      --fondo: #0f172a;
+      --tarjeta: #1e293b;
+      --texto: #e2e8f0;
+      --texto-suave: #94a3b8;
+      --acento: #38bdf8;
+      --importante: #fbbf24;
+      --session: #34d399;
+      --local: #60a5fa;
+      --cookie: #f87171;
+      --indexed: #c084fc;
+      --json: #fb923c;
+      --js: #facc15;
+      --codigo-fondo: #0c1222;
+      --borde: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.7;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .contenedor {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--borde);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: var(--acento);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--texto-suave);
+      font-size: 1.05rem;
+    }
+
+    nav {
+      background: var(--tarjeta);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+      border-left: 4px solid var(--acento);
+    }
+
+    nav h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--texto-suave);
+      margin-bottom: 0.75rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+    }
+
+    nav a {
+      color: var(--acento);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      background: var(--tarjeta);
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.75rem;
+      border: 1px solid var(--borde);
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--borde);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--acento);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    ul, ol {
+      margin: 0 0 1rem 1.25rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    .destacado {
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 4px solid var(--acento);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+    }
+
+    .aviso {
+      background: rgba(251, 191, 36, 0.12);
+      border-left: 4px solid var(--importante);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+    }
+
+    .session { color: var(--session); font-weight: 600; }
+    .local { color: var(--local); font-weight: 600; }
+    .cookie { color: var(--cookie); font-weight: 600; }
+    .indexed { color: var(--indexed); font-weight: 600; }
+    .json { color: var(--json); font-weight: 600; }
+    .js { color: var(--js); font-weight: 600; }
+    .importante { color: var(--importante); font-weight: 600; }
+    .acento { color: var(--acento); font-weight: 600; }
+
+    .etiqueta {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 0.25rem;
+    }
+
+    .etiqueta-session { background: rgba(52, 211, 153, 0.2); color: var(--session); }
+    .etiqueta-local { background: rgba(96, 165, 250, 0.2); color: var(--local); }
+    .etiqueta-cookie { background: rgba(248, 113, 113, 0.2); color: var(--cookie); }
+    .etiqueta-indexed { background: rgba(192, 132, 252, 0.2); color: var(--indexed); }
+    .etiqueta-json { background: rgba(251, 146, 60, 0.2); color: var(--json); }
+    .etiqueta-js { background: rgba(250, 204, 21, 0.2); color: var(--js); }
+    .etiqueta-importante { background: rgba(251, 191, 36, 0.2); color: var(--importante); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      border: 1px solid var(--borde);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--codigo-fondo);
+      color: var(--acento);
+    }
+
+    tr:nth-child(even) td {
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    pre {
+      background: var(--codigo-fondo);
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    code {
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+    }
+
+    p code, li code {
+      background: var(--codigo-fondo);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+      color: var(--json);
+    }
+
+    .flujo {
+      background: var(--codigo-fondo);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: monospace;
+      font-size: 0.88rem;
+      line-height: 1.9;
+      color: var(--session);
+      margin: 1rem 0;
+      white-space: pre;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <header>
+      <h1>Guía: Persistencia en el Navegador</h1>
+      <p>Apuntes para el ejercicio del test con <span class="session">Session Storage</span></p>
+    </header>
+
+    <nav>
+      <h2>Índice</h2>
+      <ul>
+        <li><a href="#persistencia">Persistencia</a></li>
+        <li><a href="#tipos">Tipos de almacenamiento</a></li>
+        <li><a href="#comparativa">Tabla comparativa</a></li>
+        <li><a href="#api">Métodos Web Storage</a></li>
+        <li><a href="#json">JSON y stringify</a></li>
+        <li><a href="#js-vs-json">JS vs JSON</a></li>
+        <li><a href="#recursos">Recursos de aprendizaje</a></li>
+        <li><a href="#tema">Tema oscuro</a></li>
+        <li><a href="#ejercicio">Tu ejercicio</a></li>
+        <li><a href="#errores">Errores frecuentes</a></li>
+      </ul>
+    </nav>
+
+    <section id="persistencia">
+      <h2>1. ¿Qué es la persistencia?</h2>
+      <p>
+        La <span class="importante">persistencia</span> es la capacidad de guardar datos en el navegador
+        para que sigan disponibles aunque recargues la página, navegues entre páginas del mismo sitio
+        o, según el método, cierres y vuelvas a abrir el navegador.
+      </p>
+      <div class="destacado">
+        En la web existen <span class="importante">cuatro formas principales</span> de guardar datos en el cliente.
+        No son intercambiables: cada una tiene un propósito distinto.
+      </div>
+    </section>
+
+    <section id="tipos">
+      <h2>2. Los cuatro tipos de almacenamiento</h2>
+
+      <h3><span class="etiqueta etiqueta-session">Session Storage</span> Persistencia temporal</h3>
+      <ul>
+        <li><span class="importante">Duración:</span> mientras la pestaña o ventana esté abierta.</li>
+        <li><span class="importante">Recarga (F5):</span> los datos <span class="session">se mantienen</span>.</li>
+        <li><span class="importante">Cerrar pestaña:</span> los datos <span class="cookie">se borran</span>.</li>
+        <li><span class="importante">Entre pestañas:</span> <span class="cookie">no se comparten</span>.</li>
+        <li><span class="importante">Capacidad:</span> ~5 MB.</li>
+        <li><span class="importante">Uso típico:</span> formularios largos, carrito temporal, <span class="session">estado de un test en curso</span>.</li>
+      </ul>
+
+      <h3><span class="etiqueta etiqueta-local">Local Storage</span> Persistencia local</h3>
+      <ul>
+        <li><span class="importante">Duración:</span> hasta que el usuario borre datos o el código los elimine.</li>
+        <li><span class="importante">Cerrar navegador:</span> los datos <span class="local">permanecen</span>.</li>
+        <li><span class="importante">Capacidad:</span> ~5–10 MB.</li>
+        <li><span class="importante">Uso típico:</span> tema oscuro/claro, idioma, preferencias del usuario.</li>
+      </ul>
+
+      <h3><span class="etiqueta etiqueta-indexed">IndexedDB</span> Persistencia masiva</h3>
+      <ul>
+        <li>Base de datos orientada a objetos, <span class="importante">asíncrona</span>.</li>
+        <li>Permite objetos complejos, archivos y grandes volúmenes.</li>
+        <li><span class="importante">Capacidad:</span> muy grande (cientos de MB o más).</li>
+        <li><span class="importante">Uso típico:</span> PWAs offline, editores, juegos con partidas guardadas.</li>
+      </ul>
+
+      <h3><span class="etiqueta etiqueta-cookie">Cookies</span> Vinculadas al servidor</h3>
+      <ul>
+        <li><span class="importante">Capacidad:</span> ~4 KB.</li>
+        <li><span class="importante">Clave:</span> se <span class="cookie">envían al servidor</span> en cada petición HTTP.</li>
+        <li><span class="importante">Uso típico:</span> autenticación, sesiones de login, analytics.</li>
+        <li>Acceso mediante <code>document.cookie</code>.</li>
+      </ul>
+
+      <div class="aviso">
+        <span class="session">Session Storage</span>, <span class="local">Local Storage</span> e
+        <span class="indexed">IndexedDB</span> <span class="importante">nunca viajan al servidor</span>.
+        Solo las <span class="cookie">cookies</span> se envían automáticamente con cada request.
+      </div>
+    </section>
+
+    <section id="comparativa">
+      <h2>3. Tabla comparativa</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Característica</th>
+            <th class="cookie">Cookies</th>
+            <th class="local">Local Storage</th>
+            <th class="session">Session Storage</th>
+            <th class="indexed">IndexedDB</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Capacidad</td>
+            <td>~4 KB</td>
+            <td>~5 MB</td>
+            <td>~5 MB</td>
+            <td>Casi ilimitado</td>
+          </tr>
+          <tr>
+            <td>Persistencia</td>
+            <td>Configurable</td>
+            <td>Permanente</td>
+            <td>Hasta cerrar pestaña</td>
+            <td>Permanente</td>
+          </tr>
+          <tr>
+            <td>¿Va al servidor?</td>
+            <td><strong>Sí</strong></td>
+            <td>No</td>
+            <td>No</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Tipo de datos</td>
+            <td>Solo texto</td>
+            <td>Solo texto</td>
+            <td>Solo texto</td>
+            <td>Objetos, archivos…</td>
+          </tr>
+          <tr>
+            <td>Complejidad</td>
+            <td>Baja</td>
+            <td>Muy baja</td>
+            <td>Muy baja</td>
+            <td>Alta (async)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="api">
+      <h2>4. Web Storage API — Métodos comunes</h2>
+      <p>
+        <span class="local">localStorage</span> y <span class="session">sessionStorage</span> comparten
+        <span class="importante">la misma API</span>. Solo cambia cuánto tiempo viven los datos.
+      </p>
+
+      <pre><code>// Guardar (sobrescribe si la clave ya existe)
+sessionStorage.setItem("clave", "valor");
+
+// Leer (devuelve string o null si no existe)
+const valor = sessionStorage.getItem("clave");
+
+// Borrar una clave
+sessionStorage.removeItem("clave");
+
+// Borrar todo
+sessionStorage.clear();
+
+// Cuántas claves hay — es PROPIEDAD, no método
+console.log(sessionStorage.length);</code></pre>
+
+      <div class="aviso">
+        <span class="importante">Regla de oro:</span> Web Storage solo guarda
+        <span class="json">texto (strings)</span>. No guarda objetos, arrays ni números directamente.
+      </div>
+    </section>
+
+    <section id="json">
+      <h2>5. Objetos y arrays: <span class="json">JSON.stringify</span> y <span class="json">JSON.parse</span></h2>
+
+      <p>
+        <span class="json">JSON.stringify</span> convierte un valor de JavaScript (objeto, array, número…)
+        en una <span class="importante">cadena de texto</span> en formato JSON para poder guardarlo.
+      </p>
+      <p>
+        <span class="json">JSON.parse</span> hace el camino inverso: convierte ese texto de vuelta
+        en un valor usable en JavaScript.
+      </p>
+
+      <pre><code>// ❌ MAL — pierdes los datos
+const usuario = { nombre: "Elena", edad: 25 };
+sessionStorage.setItem("datos", usuario);
+// Guarda: "[object Object]"
+
+// ✅ BIEN — serializar al guardar
+sessionStorage.setItem("datos_usuario", JSON.stringify(usuario));
+
+// ✅ BIEN — deserializar al leer
+const datos = JSON.parse(sessionStorage.getItem("datos_usuario"));
+console.log(datos.nombre); // "Elena"</code></pre>
+
+      <h3>Ejemplo con array</h3>
+      <pre><code>const miscanciones = ["Bohemian Rhapsody", "Billie Jean", "Hotel California"];
+
+sessionStorage.setItem("lista_reproduccion", JSON.stringify(miscanciones));
+
+const canciones = JSON.parse(sessionStorage.getItem("lista_reproduccion"));
+console.log(canciones[1]); // "Billie Jean"</code></pre>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Método</th>
+            <th>Dirección</th>
+            <th>Para qué</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>JSON.stringify</code></td>
+            <td>JavaScript → texto</td>
+            <td><span class="importante">Guardar</span> en storage</td>
+          </tr>
+          <tr>
+            <td><code>JSON.parse</code></td>
+            <td>texto → JavaScript</td>
+            <td><span class="importante">Leer</span> del storage</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="js-vs-json">
+      <h2>6. <span class="js">JavaScript</span> vs <span class="json">JSON</span> — No son lo mismo</h2>
+
+      <h3><span class="etiqueta etiqueta-js">JavaScript</span></h3>
+      <p>
+        Es un <span class="importante">lenguaje de programación</span>. Sirve para dar lógica a la web:
+        botones, formularios, tests, animaciones…
+      </p>
+
+      <h3><span class="etiqueta etiqueta-json">JSON</span></h3>
+      <p>
+        Significa <span class="json">JavaScript Object Notation</span>. No es otro lenguaje ni una versión de JS.
+        Es un <span class="importante">formato de texto</span> para representar datos. Solo sirve para
+        guardar o intercambiar información, no para programar.
+      </p>
+
+      <pre><code>// Esto es JSON (texto con estructura de datos):
+{"nombre": "Elena", "edad": 25}</code></pre>
+
+      <h3>¿Dónde están las versiones reales de JavaScript?</h3>
+      <p>Se llaman <span class="acento">ECMAScript</span> (estándar oficial del lenguaje):</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre habitual</th>
+            <th>Novedades destacadas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>ES5</td>
+            <td>Base clásica del lenguaje</td>
+          </tr>
+          <tr>
+            <td>ES6 / ES2015</td>
+            <td><code>let</code>, <code>const</code>, clases, flechas <code>=&gt;</code>, módulos</td>
+          </tr>
+          <tr>
+            <td>ES2016, ES2017…</td>
+            <td><code>async/await</code> y más mejoras anuales</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="recursos">
+      <h2>7. Recursos de aprendizaje — ¿Versiones o autores?</h2>
+      <p>
+        Recursos como <span class="acento">Aprende JavaScript (MiDuDev)</span>,
+        <span class="acento">Aprende JavaScript (Jon Mircha)</span>,
+        <span class="acento">Eloquent JavaScript</span> o
+        <span class="acento">javascript.info</span>
+        <span class="importante">no son versiones de JavaScript</span>.
+        Son cursos, libros o tutoriales de <span class="importante">distintos autores</span> que enseñan
+        el <span class="js">mismo lenguaje</span>.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Recurso</th>
+            <th>Qué es</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Aprende JavaScript (MiDuDev)</td>
+            <td>Curso del creador <strong>MiDuDev</strong></td>
+          </tr>
+          <tr>
+            <td>Aprende JavaScript (Jon Mircha)</td>
+            <td>Curso del creador <strong>Jon Mircha</strong></td>
+          </tr>
+          <tr>
+            <td>Eloquent JavaScript</td>
+            <td>Libro de <strong>Marijn Haverbeke</strong></td>
+          </tr>
+          <tr>
+            <td>El Tutorial de JavaScript Moderno</td>
+            <td>Sitio <strong>javascript.info</strong></td>
+          </tr>
+          <tr>
+            <td>W3Schools JSON</td>
+            <td>Tutorial sobre el <span class="json">formato JSON</span>, no sobre JS</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="tema">
+      <h2>8. Ejemplo práctico: tema oscuro con <span class="local">localStorage</span></h2>
+      <p>
+        Las preferencias de larga duración (como el tema) usan
+        <span class="local">localStorage</span>, no <span class="session">sessionStorage</span>.
+      </p>
+
+      <pre><code>// Al cargar (idealmente en el &lt;head&gt;)
+const temaGuardado = localStorage.getItem('tema');
+if (temaGuardado === 'dark') {
+  document.documentElement.classList.add('dark');
+}
+
+// Al hacer clic en "Cambiar tema"
+function cambiarTema() {
+  document.documentElement.classList.toggle('dark');
+
+  if (document.documentElement.classList.contains('dark')) {
+    localStorage.setItem('tema', 'dark');
+  } else {
+    localStorage.setItem('tema', 'light');
+  }
+}</code></pre>
+
+      <div class="destacado">
+        <span class="importante">Cómo funciona Tailwind dark mode:</span> clases como
+        <code>bg-white dark:bg-slate-900</code> definen dos estilos. Tailwind genera reglas del tipo
+        <code>.dark .dark\:bg-slate-900</code>. Solo aplica el estilo <code>dark:</code> si un ancestro
+        (normalmente <code>&lt;html&gt;</code>) tiene la clase <code>dark</code>.
+        JavaScript solo enciende o apaga esa clase.
+      </div>
+    </section>
+
+    <section id="ejercicio">
+      <h2>9. Conexión con tu ejercicio del test</h2>
+      <p>
+        Tu ejercicio es un <span class="importante">test de selección simple</span> con
+        <span class="session">Session Storage</span>. Encaja porque:
+      </p>
+      <ol>
+        <li>Mantiene las respuestas si el usuario recarga por error (F5).</li>
+        <li>Al cerrar la pestaña, el test se reinicia.</li>
+        <li>Si guardas varias respuestas, usa un array u objeto con <code>JSON.stringify</code> / <code>JSON.parse</code>.</li>
+      </ol>
+
+      <h3>Flujo mental del test</h3>
+      <div class="flujo">Cargar página
+    ↓
+¿Hay datos en sessionStorage?
+    ↓ Sí              ↓ No
+Restaurar estado    Empezar test nuevo
+    ↓
+Usuario responde pregunta
+    ↓
+sessionStorage.setItem(..., JSON.stringify(respuestas))
+    ↓
+Siguiente pregunta / Mostrar resultado</div>
+
+      <h3>¿Cuándo usar cada almacenamiento?</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Necesitas…</th>
+            <th>Usa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Preferencias que sobrevivan al cierre del navegador</td>
+            <td><span class="local">localStorage</span></td>
+          </tr>
+          <tr>
+            <td>Estado temporal (test, formulario, carrito)</td>
+            <td><span class="session">sessionStorage</span></td>
+          </tr>
+          <tr>
+            <td>Datos grandes o archivos</td>
+            <td><span class="indexed">IndexedDB</span></td>
+          </tr>
+          <tr>
+            <td>Datos que el servidor debe recibir</td>
+            <td><span class="cookie">Cookies</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="errores">
+      <h2>10. Errores frecuentes que debes evitar</h2>
+      <ul>
+        <li>Guardar objetos o arrays <span class="importante">sin</span> <code>JSON.stringify</code>.</li>
+        <li>Olvidar <code>JSON.parse</code> al leer datos complejos.</li>
+        <li>Usar <span class="local">localStorage</span> cuando necesitas datos solo de la sesión (o al revés).</li>
+        <li>Escribir <code>sessionStorage.length()</code> — es <span class="importante">propiedad</span>, sin paréntesis.</li>
+        <li>Asumir que Session Storage se borra al recargar — <span class="session">no se borra con F5</span>.</li>
+        <li>Esperar compartir datos entre pestañas con Session Storage — <span class="cookie">no se comparten</span>.</li>
+      </ul>
+    </section>
+
+    <footer>
+      Guía de apoyo — Ejercicio: Test de selección simple con Session Storage
+    </footer>
+  </div>
+</body>
+</html>

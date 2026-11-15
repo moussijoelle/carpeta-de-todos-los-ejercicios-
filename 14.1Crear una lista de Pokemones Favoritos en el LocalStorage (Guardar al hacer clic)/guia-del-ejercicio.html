@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía del ejercicio — Favoritos en localStorage</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a1a;
+      background: #f8f9fa;
+    }
+
+    h1 {
+      color: #c0392b;
+      border-bottom: 3px solid #e74c3c;
+      padding-bottom: 0.5rem;
+    }
+
+    h2 { color: #2980b9; margin-top: 2rem; }
+    h3 { color: #27ae60; margin-top: 1.5rem; }
+
+    section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+    }
+
+    th { background: #ecf0f1; }
+
+    code {
+      background: #f1f2f6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background: #2d3436;
+      color: #dfe6e9;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+    }
+
+    .francais { border-left: 4px solid #9b59b6; }
+    .francais h2 { color: #8e44ad; }
+
+    .cambios { border-left: 4px solid #e67e22; }
+    .cambios h2 { color: #d35400; }
+
+    .resumen {
+      background: #fff9e6;
+      border-left: 4px solid #f39c12;
+      padding: 1rem 1.25rem;
+      border-radius: 0 6px 6px 0;
+      margin-top: 1rem;
+    }
+
+    .flujo {
+      background: #eef7ff;
+      border-left: 4px solid #3498db;
+      padding: 1rem 1.25rem;
+      border-radius: 0 6px 6px 0;
+      font-family: monospace;
+      white-space: pre-line;
+      font-size: 0.9rem;
+    }
+
+    ul, ol { padding-left: 1.25rem; }
+    li { margin-bottom: 0.4rem; }
+
+    .nota {
+      background: #fdecea;
+      border-left: 4px solid #e74c3c;
+      padding: 0.8rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    .resumen-cambios {
+      border-left: 4px solid #16a085;
+    }
+
+    .resumen-cambios h2 {
+      color: #16a085;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Guía del ejercicio 14.1 — Favoritos en localStorage</h1>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- RESUMEN RÁPIDO — Cambios que hay que hacer                 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <section class="resumen-cambios">
+    <h2>Cambios que hay que hacer</h2>
+    <p>Lista rápida de todo lo que debes modificar antes de empezar a codificar. Más abajo encontrarás el detalle con ejemplos de código.</p>
+
+    <h3>En <code>index.html</code></h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cambio</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Corregir script</strong></td>
+          <td>Cambiar <code>main.js</code> → <code>app.js</code> (tu archivo real)</td>
+        </tr>
+        <tr>
+          <td><strong>Botón auditar</strong></td>
+          <td>Añadir <code>&lt;button id="btn-auditar"&gt;</code> en el header</td>
+        </tr>
+        <tr>
+          <td><strong>Zona favoritos</strong></td>
+          <td>Añadir <code>&lt;div id="lista-favoritos"&gt;</code> en el main (recomendado)</td>
+        </tr>
+        <tr>
+          <td><strong>Lista placeholder</strong></td>
+          <td>Opcional: vaciar los <code>&lt;a&gt;01. hello&lt;/a&gt;</code> del aside</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="nota" style="background: #e8f8f5; border-color: #16a085;">
+      El botón <strong>« Añadir a Favoritos »</strong> <em>no</em> va en el HTML fijo: se crea en JS cuando muestras el detalle del Pokémon.
+    </div>
+
+    <h3>En <code>js/app.js</code></h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Cambio</th>
+          <th>Detalle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Nuevas constantes</strong></td>
+          <td><code>LISTA_FAVORITOS</code>, <code>BTN_AUDITAR</code>, <code>CLAVE_FAVORITOS</code></td>
+        </tr>
+        <tr>
+          <td><strong><code>guardarEnFavoritos()</code></strong></td>
+          <td>Nueva función con <code>setItem</code> + <code>JSON.stringify</code></td>
+        </tr>
+        <tr>
+          <td><strong><code>buscarDetallePokemon</code></strong></td>
+          <td>Añadir botón en el HTML del detalle + <code>addEventListener</code> al clic</td>
+        </tr>
+        <tr>
+          <td><strong><code>mostrarFavoritos()</code></strong></td>
+          <td>Nueva función para pintar favoritos guardados</td>
+        </tr>
+        <tr>
+          <td><strong><code>auditarLocalStorage()</code></strong></td>
+          <td>Bucle <code>for</code> con <code>localStorage.key(i)</code> y <code>getItem()</code></td>
+        </tr>
+        <tr>
+          <td><strong>Al cargar</strong></td>
+          <td>Llamar <code>mostrarFavoritos()</code> y enlazar el botón auditar</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="resumen">
+      <p><strong>No tocar:</strong> <code>mostrarDatos</code>, <code>leerUrlPokemon</code>, <code>cargarDatos</code>, paginación.</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- PARTIE FRANÇAISE — Explication pour débutante              -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <section class="francais">
+    <h2>Explication de l'exercice (en français)</h2>
+
+    <p><strong>Bonjour !</strong></p>
+
+    <p>Tu as déjà une page qui montre des Pokémon. C'est bien. <strong>Cet exercice, c'est l'étape suivante</strong> : tu vas apprendre à <strong>garder tes Pokémon préférés</strong>, même si tu fermes le navigateur.</p>
+
+    <h3>Ce que tu as déjà (le point de départ)</h3>
+    <p>Imagine une application en deux colonnes :</p>
+    <ul>
+      <li><strong>À gauche</strong> : une liste de noms (Bulbasaur, Charmander…). Tu peux tourner les pages avec les flèches.</li>
+      <li><strong>À droite</strong> : quand tu cliques sur un nom, tu vois sa fiche — photo, numéro, types.</li>
+    </ul>
+    <p>Tout ça vient d'<strong>Internet</strong>, d'un site gratuit qui s'appelle <strong>PokéAPI</strong>. Ta page <em>demande</em> les infos et les <em>affiche</em>. C'est déjà très bien.</p>
+    <p><strong>Mais</strong> : si tu fermes l'onglet, tout disparaît. La page ne se souvient de rien.</p>
+
+    <h3>Ce que l'exercice te demande d'ajouter</h3>
+
+    <h3>1. Un bouton « Ajouter aux favoris »</h3>
+    <p>Quand tu vois la fiche d'un Pokémon à droite (avec sa grande image), tu dois ajouter un <strong>bouton</strong>.</p>
+    <p>Ce bouton, c'est comme dire : <em>« Celui-là, je l'aime. Je veux le garder. »</em></p>
+    <p>Tu cliques → le programme <strong>enregistre</strong> ce Pokémon quelque part.</p>
+
+    <h3>2. Où on enregistre ? Dans le localStorage</h3>
+    <p>Le <strong>localStorage</strong>, c'est une <strong>petite mémoire</strong> dans ton navigateur (Chrome, Firefox…).</p>
+    <ul>
+      <li>Ce n'est <strong>pas</strong> sur Internet.</li>
+      <li>Ce n'est <strong>pas</strong> sur la PokéAPI.</li>
+      <li>C'est <strong>chez toi</strong>, dans ton ordinateur, dans le navigateur.</li>
+    </ul>
+    <p><strong>Analogie simple :</strong><br>
+    La PokéAPI, c'est une <strong>bibliothèque géante</strong> où tu vas lire des livres.<br>
+    Le localStorage, c'est ton <strong>carnet personnel</strong> où tu notes : <em>« J'adore Pikachu, j'adore Eevee… »</em></p>
+    <p>Même si tu fermes la page et tu reviens demain, ton carnet est toujours là.</p>
+
+    <h3>3. Une fonction pour sauvegarder</h3>
+    <p>Tu dois écrire une <strong>fonction</strong> (une petite recette de code) qui :</p>
+    <ol>
+      <li>Prend les infos du Pokémon (nom, image, numéro…).</li>
+      <li>Les met dans le localStorage.</li>
+      <li>Peut-être évite de sauver deux fois le même Pokémon.</li>
+    </ol>
+    <p><strong>En langage humain :</strong> <em>« Quand je clique sur le bouton, appelle la fonction qui écrit dans mon carnet. »</em></p>
+
+    <h3>4. Un programme pour « auditer » le localStorage</h3>
+    <p><strong>Auditer</strong>, ça veut dire : <strong>regarder ce qui est stocké</strong>, comme ouvrir ton carnet et lire toutes les pages.</p>
+    <p>Le localStorage fonctionne avec des <strong>clés</strong> (des noms) et des <strong>valeurs</strong> (le contenu). Par exemple :</p>
+    <ul>
+      <li>Clé : <code>pokemonesFavoritos</code></li>
+      <li>Valeur : la liste de tes favoris en texte</li>
+    </ul>
+    <p>L'exercice te demande de faire une <strong>boucle</strong> — répéter une action plusieurs fois — pour parcourir tout ce qui est sauvegardé :</p>
+    <pre><code>Pour chaque chose dans le localStorage :
+  → lire le nom (la clé)
+  → lire le contenu (la valeur)
+  → l'afficher (souvent dans la console)</code></pre>
+    <p>C'est comme feuilleter ton carnet page par page et dire à voix haute ce qu'il y a écrit.</p>
+
+    <h3>Le parcours complet, étape par étape</h3>
+    <div class="flujo">1. Tu ouvres la page
+      ↓
+2. La liste de Pokémon s'affiche (comme avant)
+      ↓
+3. Tu cliques sur un nom → sa fiche apparaît à droite
+      ↓
+4. Tu vois le NOUVEAU bouton « Ajouter aux favoris »
+      ↓
+5. Tu cliques → le Pokémon est sauvé dans le localStorage
+      ↓
+6. Tu fermes le navigateur, tu reviens → tes favoris sont toujours là
+      ↓
+7. Tu lances l'audit → tu vois tout ce qui est enregistré</div>
+
+    <h3>Ce que tu n'as pas à refaire</h3>
+    <p>Tu ne recommences pas tout depuis zéro. Tu <strong>modifies</strong> le programme de la prof :</p>
+    <ul>
+      <li>La liste à gauche → <strong>tu gardes</strong></li>
+      <li>Le clic pour voir le détail → <strong>tu gardes</strong></li>
+      <li>Les flèches suivant / précédent → <strong>tu gardes</strong></li>
+    </ul>
+    <p>Tu <strong>ajoutes</strong> seulement : le bouton favoris, la fonction de sauvegarde, la fonction d'audit.</p>
+
+    <div class="resumen">
+      <p><strong>En une phrase :</strong></p>
+      <p>Tu transformes une page qui <strong>consulte</strong> des Pokémon sur Internet en une page qui te laisse aussi <strong>choisir tes préférés</strong> et les <strong>garder dans ton navigateur</strong>, comme des favoris sur ton téléphone.</p>
+    </div>
+
+    <h3>Une image mentale pour t'aider</h3>
+    <table>
+      <thead>
+        <tr><th>Élément</th><th>C'est quoi ?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>PokéAPI</strong></td><td>Le grand livre sur Internet</td></tr>
+        <tr><td><strong>fetch</strong></td><td>Demander une page de ce livre</td></tr>
+        <tr><td><strong>Clic sur un Pokémon</strong></td><td>Choisir un chapitre à lire</td></tr>
+        <tr><td><strong>Bouton Favoris</strong></td><td>Mettre un signet « j'aime »</td></tr>
+        <tr><td><strong>localStorage</strong></td><td>Ton tiroir secret dans le navigateur</td></tr>
+        <tr><td><strong>Audit</strong></td><td>Ouvrir le tiroir et vérifier ce qu'il y a dedans</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- CAMBIOS EN HTML                                            -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <section class="cambios">
+    <h2>Cambios en HTML (<code>index.html</code>)</h2>
+
+    <div class="nota">
+      <strong>Importante:</strong> Tu archivo JS se llama <code>app.js</code>, pero el HTML apunta a <code>main.js</code>.
+      Cambia la línea del script a <code>./js/app.js</code> para que funcione.
+    </div>
+
+    <h3>1. Corregir la ruta del script</h3>
+    <p>Cambia al final del body:</p>
+    <pre><code>&lt;script src="./js/app.js"&gt;&lt;/script&gt;</code></pre>
+
+    <h3>2. (Opcional) Quitar los &lt;a&gt; de prueba</h3>
+    <p>Los 20 enlaces <code>01. hello</code> son solo placeholder. El JS los reemplaza con <code>innerHTML</code>. Puedes dejar el div vacío:</p>
+    <pre><code>&lt;div id="lista-pokemons" class="h-px flex-1 ..."&gt;&lt;/div&gt;</code></pre>
+
+    <h3>3. Añadir zona de favoritos (recomendado)</h3>
+    <p>Dentro de <code>&lt;main id="pokemon"&gt;</code>, después del detalle, añade un contenedor para mostrar favoritos guardados:</p>
+    <pre><code>&lt;section class="mt-4 px-4"&gt;
+  &lt;h2 class="text-xl text-center text-amber-500 mb-2"&gt;Mis Favoritos&lt;/h2&gt;
+  &lt;div id="lista-favoritos" class="flex flex-wrap gap-3 justify-center"&gt;&lt;/div&gt;
+&lt;/section&gt;</code></pre>
+
+    <h3>4. Añadir botón para auditar localStorage (pide el ejercicio)</h3>
+    <p>En el header o debajo del título principal:</p>
+    <pre><code>&lt;button type="button" id="btn-auditar"
+  class="ml-4 px-3 py-1 bg-white text-amber-600 rounded text-sm font-bold"&gt;
+  Auditar localStorage
+&lt;/button&gt;</code></pre>
+
+    <h3>5. El botón « Añadir a Favoritos » — NO va en el HTML estático</h3>
+    <p>Ese botón se crea <strong>dinámicamente</strong> dentro de <code>buscarDetallePokemon</code> en el JS, porque solo aparece cuando hay un Pokémon seleccionado. No hace falta ponerlo en el HTML fijo.</p>
+
+    <h3>Resumen cambios HTML</h3>
+    <table>
+      <thead>
+        <tr><th>Qué</th><th>Dónde</th><th>Obligatorio</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Corregir <code>app.js</code></td><td>Final del body</td><td>Sí</td></tr>
+        <tr><td><code>id="lista-favoritos"</code></td><td>Dentro de main</td><td>Recomendado</td></tr>
+        <tr><td><code>id="btn-auditar"</code></td><td>Header</td><td>Sí (para el audit)</td></tr>
+        <tr><td>Vaciar lista placeholder</td><td><code>lista-pokemons</code></td><td>Opcional</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- CAMBIOS EN JS                                              -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+
+  <section class="cambios">
+    <h2>Cambios en JavaScript (<code>js/app.js</code>)</h2>
+
+    <h3>1. Mapear los nuevos elementos HTML</h3>
+    <pre><code>const LISTA_FAVORITOS = document.getElementById('lista-favoritos');
+const BTN_AUDITAR = document.getElementById('btn-auditar');
+
+const CLAVE_FAVORITOS = 'pokemonesFavoritos';</code></pre>
+
+    <h3>2. Crear la función guardarEnFavoritos</h3>
+    <p>Recibe un objeto con id, nombre, imagen, tipos y url. Usa <code>getItem</code>, <code>JSON.parse</code>, <code>push</code>, <code>setItem</code> y <code>JSON.stringify</code>:</p>
+    <pre><code>const guardarEnFavoritos = (pokemon) => {
+  try {
+    const guardados = localStorage.getItem(CLAVE_FAVORITOS);
+    let favoritos = guardados ? JSON.parse(guardados) : [];
+
+    const yaExiste = favoritos.some((fav) => fav.id === pokemon.id);
+    if (yaExiste) {
+      alert(`${pokemon.nombre} ya está en favoritos`);
+      return;
+    }
+
+    favoritos.push(pokemon);
+    localStorage.setItem(CLAVE_FAVORITOS, JSON.stringify(favoritos));
+    mostrarFavoritos();
+    alert(`${pokemon.nombre} añadido a favoritos`);
+
+  } catch (error) {
+    console.error('No se pudo guardar en localStorage:', error);
+  }
+};</code></pre>
+
+    <h3>3. Modificar buscarDetallePokemon — añadir el botón</h3>
+    <p>Dentro del template HTML del detalle, después de los tipos, añade el botón:</p>
+    <pre><code>&lt;button type="button" id="btn-favorito"
+  class="mt-4 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600"&gt;
+  Añadir a Favoritos
+&lt;/button&gt;</code></pre>
+    <p>Después de <code>DETALLE_CONTENEDOR.innerHTML = ...</code>, enlaza el clic:</p>
+    <pre><code>document.getElementById('btn-favorito').addEventListener('click', () => {
+  guardarEnFavoritos({ id, nombre, imagen, tipos, url });
+});</code></pre>
+
+    <h3>4. Crear mostrarFavoritos (recomendado)</h3>
+    <p>Lee localStorage al cargar y pinta las tarjetas en <code>lista-favoritos</code>:</p>
+    <pre><code>const mostrarFavoritos = () => {
+  if (!LISTA_FAVORITOS) return;
+
+  const guardados = localStorage.getItem(CLAVE_FAVORITOS);
+  if (!guardados) {
+    LISTA_FAVORITOS.innerHTML = '&lt;p class="text-slate-500"&gt;No hay favoritos aún&lt;/p&gt;';
+    return;
+  }
+
+  const favoritos = JSON.parse(guardados);
+  let html = '';
+
+  for (const fav of favoritos) {
+    html += `
+      &lt;div class="text-center bg-white p-2 rounded shadow"&gt;
+        &lt;img src="${fav.imagen}" alt="${fav.nombre}" class="w-20 h-20 object-contain"&gt;
+        &lt;p class="text-sm font-bold"&gt;${fav.nombre}&lt;/p&gt;
+      &lt;/div&gt;`;
+  }
+
+  LISTA_FAVORITOS.innerHTML = html;
+};</code></pre>
+    <p>Llama a <code>mostrarFavoritos()</code> al final del archivo, junto a <code>cargarDatos()</code>.</p>
+
+    <h3>5. Crear auditarLocalStorage (pide el ejercicio)</h3>
+    <p>Bucle <code>for</code> tradicional con <code>localStorage.key(i)</code> y <code>getItem()</code>:</p>
+    <pre><code>const auditarLocalStorage = () => {
+  console.log('=== Auditoría del localStorage ===');
+
+  for (let i = 0; i &lt; localStorage.length; i++) {
+    const clave = localStorage.key(i);
+    const valor = localStorage.getItem(clave);
+
+    console.log(`Clave: ${clave}`);
+    console.log(`Valor: ${valor}`);
+  }
+};</code></pre>
+    <p>Enlazar al botón:</p>
+    <pre><code>BTN_AUDITAR.addEventListener('click', auditarLocalStorage);</code></pre>
+
+    <h3>6. Lo que NO tocas</h3>
+    <ul>
+      <li><code>mostrarDatos</code> — sigue igual</li>
+      <li><code>leerUrlPokemon</code> — sigue igual</li>
+      <li><code>cargarDatos</code> — sigue igual</li>
+      <li><code>paginaSiguiente</code> / <code>paginaAnterior</code> — siguen igual</li>
+    </ul>
+
+    <h3>Resumen cambios JS</h3>
+    <table>
+      <thead>
+        <tr><th>Función / cambio</th><th>Qué hace</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>guardarEnFavoritos</code></td><td>Guarda el Pokémon en localStorage al hacer clic</td></tr>
+        <tr><td>Botón en <code>buscarDetallePokemon</code></td><td>Muestra « Añadir a Favoritos » en el detalle</td></tr>
+        <tr><td><code>mostrarFavoritos</code></td><td>Pinta la lista de favoritos guardados</td></tr>
+        <tr><td><code>auditarLocalStorage</code></td><td>Recorre todo el localStorage con for + key() + getItem()</td></tr>
+        <tr><td>Nuevas constantes</td><td><code>LISTA_FAVORITOS</code>, <code>BTN_AUDITAR</code>, <code>CLAVE_FAVORITOS</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Flujo final del programa</h3>
+    <div class="flujo">Página carga → cargarDatos() + mostrarFavoritos()
+     ↓
+Clic en Pokémon → buscarDetallePokemon() → detalle + botón favoritos
+     ↓
+Clic « Añadir a Favoritos » → guardarEnFavoritos() → localStorage
+     ↓
+Clic « Auditar » → auditarLocalStorage() → console.log de todo</div>
+
+    <h3>Cómo comprobar que funciona</h3>
+    <ol>
+      <li>Abre la página en el navegador</li>
+      <li>Clic en un Pokémon → detalle visible</li>
+      <li>Clic en « Añadir a Favoritos » → alerta de confirmación</li>
+      <li>F12 → Application → Local Storage → verás <code>pokemonesFavoritos</code></li>
+      <li>Clic en « Auditar localStorage » → F12 → Console → verás claves y valores</li>
+      <li>Recarga la página → los favoritos siguen ahí</li>
+    </ol>
+  </section>
+
+</body>
+</html>

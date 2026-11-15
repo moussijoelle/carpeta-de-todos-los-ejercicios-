@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía del Ejercicio — Test de Selección</title>
+  <style>
+    :root {
+      --fondo: #0f172a;
+      --tarjeta: #1e293b;
+      --texto: #e2e8f0;
+      --texto-suave: #94a3b8;
+      --acento: #38bdf8;
+      --importante: #fbbf24;
+      --session: #34d399;
+      --clase: #c084fc;
+      --boton: #60a5fa;
+      --modal: #f472b6;
+      --json: #fb923c;
+      --codigo-fondo: #0c1222;
+      --borde: #334155;
+      --aviso-fondo: rgba(251, 191, 36, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.7;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .contenedor { max-width: 900px; margin: 0 auto; }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--borde);
+    }
+
+    header h1 { font-size: 2rem; color: var(--acento); margin-bottom: 0.5rem; }
+    header p { color: var(--texto-suave); }
+
+    .enlaces-guia {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .enlaces-guia a {
+      color: var(--session);
+      text-decoration: none;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--session);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .enlaces-guia a:hover { background: rgba(52, 211, 153, 0.15); }
+
+    section {
+      background: var(--tarjeta);
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--borde);
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--borde);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin: 1.25rem 0 0.6rem;
+      color: var(--acento);
+    }
+
+    p { margin-bottom: 0.9rem; }
+    ul, ol { margin: 0 0 1rem 1.25rem; }
+    li { margin-bottom: 0.35rem; }
+
+    .importante { color: var(--importante); font-weight: 600; }
+    .session { color: var(--session); font-weight: 600; }
+    .clase { color: var(--clase); font-weight: 600; }
+    .boton { color: var(--boton); font-weight: 600; }
+    .modal { color: var(--modal); font-weight: 600; }
+    .json { color: var(--json); font-weight: 600; }
+    .acento { color: var(--acento); font-weight: 600; }
+
+    .aviso {
+      background: var(--aviso-fondo);
+      border-left: 4px solid var(--importante);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+    }
+
+    .destacado {
+      background: rgba(56, 189, 248, 0.1);
+      border-left: 4px solid var(--acento);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+    }
+
+    .etiqueta {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-right: 0.25rem;
+    }
+
+    .etiqueta-session { background: rgba(52, 211, 153, 0.2); color: var(--session); }
+    .etiqueta-clase { background: rgba(192, 132, 252, 0.2); color: var(--clase); }
+    .etiqueta-boton { background: rgba(96, 165, 250, 0.2); color: var(--boton); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      border: 1px solid var(--borde);
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+    }
+
+    th { background: var(--codigo-fondo); color: var(--acento); }
+
+    pre {
+      background: var(--codigo-fondo);
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+
+    code {
+      font-family: "Cascadia Code", Consolas, monospace;
+    }
+
+    p code, li code, td code {
+      background: var(--codigo-fondo);
+      padding: 0.12rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.88em;
+      color: var(--json);
+    }
+
+    .flujo {
+      background: var(--codigo-fondo);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: monospace;
+      font-size: 0.86rem;
+      line-height: 1.9;
+      color: var(--session);
+      white-space: pre;
+      margin: 1rem 0;
+    }
+
+    .mockup {
+      background: #fff;
+      color: #1e293b;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    .mockup h4 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+    .mockup .sub { color: #64748b; font-size: 0.9rem; margin-bottom: 1rem; }
+    .mockup .pregunta { font-weight: 600; margin-bottom: 1rem; text-align: left; }
+    .mockup label { display: block; text-align: left; margin: 0.4rem 0; }
+    .mockup .botones { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+    .mockup .botones span {
+      background: #e2e8f0;
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--texto-suave);
+      font-size: 0.88rem;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <header>
+      <h1>Guía del Ejercicio</h1>
+      <p>Programa un test de selección simple usando <span class="session">Session Storage</span></p>
+      <div class="enlaces-guia">
+        <a href="guia.html">Guía de teoría (Persistencia)</a>
+        <a href="index.html">Ir al ejercicio</a>
+      </div>
+    </header>
+
+    <section>
+      <h2>¿En qué consiste el ejercicio?</h2>
+      <p>
+        Debes crear una <span class="importante">página web con un cuestionario</span> (un test tipo examen)
+        sobre HTML. El usuario verá preguntas con 4 opciones, podrá navegar entre ellas, verificar sus respuestas
+        y al final ver los resultados guardados.
+      </p>
+
+      <div class="mockup">
+        <h4>Cuestionario sobre HTML</h4>
+        <p class="sub">Pregunta 1 de 20</p>
+        <p class="pregunta">¿Cuál es el código HTML correcto para un salto de línea?</p>
+        <label><input type="radio" disabled> a. &lt;br&gt;</label>
+        <label><input type="radio" disabled> b. &lt;break/&gt;</label>
+        <label><input type="radio" disabled> c. &lt;/p&gt;</label>
+        <label><input type="radio" disabled> d. &lt;hr&gt;</label>
+        <div class="botones">
+          <span>PREGUNTA ANTERIOR</span>
+          <span>VERIFICAR</span>
+          <span>PREGUNTA SIGUIENTE</span>
+          <span>REINICIAR TEST</span>
+        </div>
+      </div>
+
+      <div class="destacado">
+        En resumen: es un <span class="importante">QCM interactivo</span> donde cada pregunta es un objeto,
+        los cambios se guardan en <span class="session">sessionStorage</span> y al terminar se muestran los resultados.
+      </div>
+    </section>
+
+    <section>
+      <h2>La clase <span class="clase">Pregunta</span></h2>
+      <p>
+        Una <span class="clase">clase</span> es como un <span class="importante">molde</span>: defines una vez cómo
+        es una pregunta y luego creas tantas preguntas como necesites.
+      </p>
+
+      <p>Todas las preguntas se guardan en un <span class="importante">array</span> llamado <code>preguntas</code>.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Atributo</th>
+            <th>Qué significa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>texto</code></td>
+            <td>El enunciado de la pregunta</td>
+          </tr>
+          <tr>
+            <td><code>opciones</code></td>
+            <td>Las 4 respuestas posibles (a, b, c, d)</td>
+          </tr>
+          <tr>
+            <td><code>opcionCorrecta</code></td>
+            <td>La letra o índice de la respuesta correcta</td>
+          </tr>
+          <tr>
+            <td><code>opcionSeleccionada</code></td>
+            <td>Lo que el usuario ha elegido (vacío al inicio)</td>
+          </tr>
+          <tr>
+            <td><code>puntosPregunta</code></td>
+            <td>Puntos que vale la pregunta (ej: 5)</td>
+          </tr>
+          <tr>
+            <td><code>puntosAsignados</code></td>
+            <td>Puntos que el usuario ha conseguido (0 si falla)</td>
+          </tr>
+          <tr>
+            <td><code>justificacion</code></td>
+            <td>Texto que explica por qué la respuesta es correcta</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <pre><code>class Pregunta {
+  constructor(texto, opciones, opcionCorrecta, puntosPregunta, justificacion) {
+    this.texto = texto;
+    this.opciones = opciones;
+    this.opcionCorrecta = opcionCorrecta;
+    this.opcionSeleccionada = null;
+    this.puntosPregunta = puntosPregunta;
+    this.puntosAsignados = 0;
+    this.justificacion = justificacion;
+  }
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>Los botones y qué debe hacer cada uno</h2>
+
+      <h3><span class="etiqueta etiqueta-boton">VERIFICAR</span> <span class="boton">El más importante</span></h3>
+      <ol>
+        <li>Comprueba si <code>opcionSeleccionada</code> coincide con <code>opcionCorrecta</code>.</li>
+        <li>Si es correcta → asigna los puntos a <code>puntosAsignados</code>.</li>
+        <li>Muestra una <span class="modal">ventana modal</span> con el texto de <code>justificacion</code>.</li>
+      </ol>
+
+      <h3><span class="etiqueta etiqueta-boton">PREGUNTA SIGUIENTE / ANTERIOR</span></h3>
+      <p>Cambian la pregunta visible. Actualizan el contador «Pregunta X de 20».</p>
+
+      <h3><span class="etiqueta etiqueta-boton">REINICIAR TEST</span></h3>
+      <p>Borra el progreso y vuelve a empezar desde la pregunta 1.</p>
+    </section>
+
+    <section>
+      <h2><span class="session">Session Storage</span> — la parte clave del ejercicio</h2>
+
+      <div class="aviso">
+        <span class="importante">Regla del ejercicio:</span> cada vez que cambie cualquier dato de un objeto
+        del array <code>preguntas</code> (por ejemplo, cuando el usuario elige una respuesta), debes guardar
+        <span class="importante">todo el array</span> en <span class="session">sessionStorage</span>.
+      </div>
+
+      <pre><code>// Guardar
+sessionStorage.setItem("preguntas", JSON.stringify(preguntas));
+
+// Leer al cargar la página
+const guardadas = sessionStorage.getItem("preguntas");
+if (guardadas) {
+  preguntas = JSON.parse(guardadas);
+}</code></pre>
+
+      <h3>¿Cuándo guardar?</h3>
+      <ul>
+        <li>Cuando el usuario <span class="importante">selecciona una opción</span>.</li>
+        <li>Cuando pulsa <span class="boton">VERIFICAR</span> (cambian los puntos).</li>
+        <li>Cualquier cambio en los objetos del array.</li>
+      </ul>
+
+      <h3>¿Por qué JSON?</h3>
+      <p>
+        Session Storage solo guarda <span class="json">texto</span>. Por eso usas
+        <code>JSON.stringify</code> al guardar y <code>JSON.parse</code> al leer.
+        (Más detalle en <a href="guia.html" style="color: var(--session);">guia.html</a>.)
+      </p>
+    </section>
+
+    <section>
+      <h2>Al finalizar el test</h2>
+      <p>Cuando el usuario termine las 20 preguntas, el programa debe:</p>
+      <ol>
+        <li><span class="importante">Leer</span> el array <code>preguntas</code> desde sessionStorage.</li>
+        <li><span class="importante">Mostrar</span> su contenido en pantalla (puntos, respuestas, etc.).</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Flujo completo del programa</h2>
+      <div class="flujo">Usuario abre index.html
+        ↓
+¿Hay preguntas en sessionStorage?
+        ↓ Sí                    ↓ No
+   Recuperar estado        Crear 20 preguntas nuevas
+        ↓
+Mostrar pregunta actual
+        ↓
+Usuario elige una opción
+        ↓
+Actualizar opcionSeleccionada → guardar en sessionStorage
+        ↓
+Usuario pulsa VERIFICAR
+        ↓
+¿Correcta? → puntosAsignados = puntosPregunta
+Mostrar modal con justificacion → guardar en sessionStorage
+        ↓
+Siguiente pregunta... hasta la 20
+        ↓
+Fin → leer sessionStorage y mostrar resultados</div>
+    </section>
+
+    <section>
+      <h2>Archivos de tu proyecto</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Archivo</th>
+            <th>Para qué sirve</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>index.html</code></td>
+            <td>La página del test (estructura y botones)</td>
+          </tr>
+          <tr>
+            <td><code>js/</code></td>
+            <td>Tu código JavaScript (clase, lógica, sessionStorage)</td>
+          </tr>
+          <tr>
+            <td><code>guia.html</code></td>
+            <td>Teoría de persistencia (localStorage, sessionStorage, JSON…)</td>
+          </tr>
+          <tr>
+            <td><code>guia-ejercicio.html</code></td>
+            <td>Esta guía — pasos del ejercicio del test</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Orden recomendado para programar</h2>
+      <ol>
+        <li>Crear el <span class="acento">HTML</span> con la estructura visual (título, pregunta, opciones, botones).</li>
+        <li>Crear la <span class="clase">clase Pregunta</span> y el array con las 20 preguntas.</li>
+        <li>Mostrar una pregunta en pantalla y navegar entre ellas.</li>
+        <li>Detectar la opción seleccionada y guardarla.</li>
+        <li>Implementar el botón <span class="boton">VERIFICAR</span> y el modal.</li>
+        <li>Añadir <span class="session">sessionStorage</span> (guardar y recuperar).</li>
+        <li>Mostrar resultados finales al terminar.</li>
+      </ol>
+    </section>
+
+    <footer>
+      Ejercicio 12 — Test de selección simple con Session Storage
+    </footer>
+  </div>
+</body>
+</html>

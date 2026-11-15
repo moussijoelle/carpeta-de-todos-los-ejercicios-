@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrusel con CRUD — Guide et exemples</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Urbanist', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <header class="bg-blue-600 text-white py-8 px-4 shadow-lg">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Carrusel con CRUD</h1>
+      <p class="mt-2 text-blue-100 text-lg">Guide et exemples pour comprendre l'exercice</p>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-8 space-y-6">
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-3">L'idée générale</h2>
+      <p class="mb-3">Imagine un <strong>album photo</strong> sur ton écran. Tu peux faire défiler les photos avec les boutons <strong>« Retroceder »</strong> (précédent) et <strong>« Avanzar »</strong> (suivant). C'est le <strong>carrusel</strong> (carrousel).</p>
+      <p>Mais ce n'est pas tout : tu dois aussi pouvoir <strong>gérer la liste</strong> des éléments (villes, animes, etc.). C'est là qu'intervient le <strong>CRUD</strong>.</p>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">CRUD, c'est quoi ?</h2>
+      <p class="mb-4"><strong>CRUD</strong> résume <strong>4 actions</strong> qu'on fait souvent avec une liste :</p>
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
+        <table class="w-full text-sm">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold">Lettre</th>
+              <th class="px-4 py-3 text-left font-semibold">Mot anglais</th>
+              <th class="px-4 py-3 text-left font-semibold">En français</th>
+              <th class="px-4 py-3 text-left font-semibold">Exemple</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-bold">C</td><td class="px-4 py-3">Create</td><td class="px-4 py-3">Créer</td><td class="px-4 py-3">Ajouter une nouvelle ville à l'album</td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-bold">R</td><td class="px-4 py-3">Read</td><td class="px-4 py-3">Lire / Afficher</td><td class="px-4 py-3">Voir la liste ou une ville en particulier</td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-bold">U</td><td class="px-4 py-3">Update</td><td class="px-4 py-3">Modifier</td><td class="px-4 py-3">Changer la description de Paris</td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-bold">D</td><td class="px-4 py-3">Delete</td><td class="px-4 py-3">Supprimer</td><td class="px-4 py-3">Enlever Londres de la liste</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 mb-2">Sur la maquette du cours, les boutons correspondent à :</p>
+      <ul class="list-disc list-inside space-y-1 text-slate-700">
+        <li><strong>AGREGAR</strong> → Créer (ajouter)</li>
+        <li><strong>DEVOLVER</strong> → Lire (afficher / retrouver)</li>
+        <li><strong>MODIFICAR DATOS</strong> → Modifier</li>
+        <li><strong>ELIMINAR</strong> → Supprimer</li>
+      </ul>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-3">La liste : où sont stockées les infos ?</h2>
+      <p class="mb-3">Toutes les villes (ou animes) sont dans une <strong>liste</strong> — un peu comme un <strong>carnet</strong> où chaque page = une fiche.</p>
+      <p class="mb-3">Chaque fiche contient par exemple : le nom, une photo, une petite description.</p>
+      <p>Chaque élément a une <strong>position</strong> (un numéro) : Barcelona → 0, París → 1, New York → 2, etc. Le carrusel utilise ces positions pour savoir <strong>quelle fiche afficher</strong>.</p>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-3">La fonction BUSCAR</h2>
+      <p class="mb-3">Avant de créer, modifier ou supprimer, il faut <strong>trouver</strong> l'élément dans la liste.</p>
+      <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg mb-4">
+        <p><strong>Analogie :</strong> tu as un classeur avec 2000 fiches. Quelqu'un te dit : « Trouve-moi Barcelona ». Tu ouvres chaque fiche une par une jusqu'à trouver le bon nom.</p>
+      </div>
+      <ol class="list-decimal list-inside space-y-2 mb-4">
+        <li>Elle part du début de la liste</li>
+        <li>Elle compare chaque nom avec celui qu'on cherche</li>
+        <li>Si elle trouve → elle renvoie la <strong>position</strong> (ex. : 0 pour Barcelona)</li>
+        <li>Si elle ne trouve pas → elle renvoie <strong>-1</strong> (introuvable)</li>
+      </ol>
+      <p class="mb-4">C'est une <strong>fonction indépendante</strong> : elle fait une seule chose (chercher) et toutes les autres opérations s'en servent.</p>
+      <h3 class="font-bold text-slate-700 mb-2">Logique des opérations</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li><strong>CRÉER</strong> → chercher → si -1, ajouter / sinon « existe déjà »</li>
+        <li><strong>MODIFIER</strong> → chercher → si trouvé, modifier / sinon « n'existe pas »</li>
+        <li><strong>SUPPRIMER</strong> → chercher → si trouvé, supprimer / sinon « n'existe pas »</li>
+      </ul>
+    </section>
+
+    <h2 class="text-2xl font-extrabold text-slate-800 pt-4">Explicación detallada — diapositivas del curso</h2>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Diapositiva 1 — CRUD: la lógica general</h2>
+
+      <figure class="mb-6">
+        <img
+          src="img/diapositiva-crud.png"
+          alt="Diapositiva del curso: CRUD, función BUSCAR independiente y array de ciudades favoritas"
+          class="w-full rounded-xl border border-slate-200 shadow-md"
+          loading="lazy"
+        />
+        <figcaption class="text-center text-sm text-slate-500 mt-2">Diapositiva de la profe — CRUD, BUSCAR y datos de ejemplo</figcaption>
+      </figure>
+
+      <h3 class="font-bold text-slate-700 mb-2">¿Qué es CRUD?</h3>
+      <p class="mb-4">Son las <strong>4 acciones</strong> para gestionar una lista de datos:</p>
+      <div class="overflow-x-auto rounded-xl border border-slate-200 mb-4">
+        <table class="w-full text-sm">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold">Letra</th>
+              <th class="px-4 py-3 text-left font-semibold">Español</th>
+              <th class="px-4 py-3 text-left font-semibold">Qué hace</th>
+              <th class="px-4 py-3 text-left font-semibold">En tu proyecto</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr><td class="px-4 py-3 font-bold">C</td><td class="px-4 py-3">Crear</td><td class="px-4 py-3">Añadir algo nuevo</td><td class="px-4 py-3"><code class="bg-slate-100 px-1 rounded">agregar</code></td></tr>
+            <tr><td class="px-4 py-3 font-bold">R</td><td class="px-4 py-3">Leer</td><td class="px-4 py-3">Ver o recuperar un dato</td><td class="px-4 py-3"><code class="bg-slate-100 px-1 rounded">devolver</code></td></tr>
+            <tr><td class="px-4 py-3 font-bold">U</td><td class="px-4 py-3">Modificar</td><td class="px-4 py-3">Cambiar datos existentes</td><td class="px-4 py-3"><code class="bg-slate-100 px-1 rounded">modificar</code></td></tr>
+            <tr><td class="px-4 py-3 font-bold">D</td><td class="px-4 py-3">Eliminar</td><td class="px-4 py-3">Quitar algo de la lista</td><td class="px-4 py-3"><code class="bg-slate-100 px-1 rounded">eliminar</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg mb-4">
+        <p class="font-semibold mb-2">La regla de oro: siempre BUSCAR primero</p>
+        <p>La profe insiste en que <code class="bg-amber-100 px-1 rounded">buscar</code> es una <strong>función INDEPENDIENTE</strong>. Solo hace una cosa: encontrar un elemento por su nombre.</p>
+        <ul class="list-disc list-inside mt-2 space-y-1">
+          <li>Si <strong>existe</strong> → devuelve la <strong>posición</strong> (0, 1, 2…)</li>
+          <li>Si <strong>no existe</strong> → devuelve <strong>-1</strong></li>
+        </ul>
+      </div>
+
+      <h3 class="font-bold text-slate-700 mb-2">Cómo se usa buscar en cada operación</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+          <p class="font-semibold text-green-800 mb-2">CREAR (Agregar)</p>
+          <ol class="list-decimal list-inside space-y-1 text-sm">
+            <li><strong>BUSCAR</strong></li>
+            <li>Si devuelve <strong>-1</strong> → crear<br>Si ya existe → mensaje «ya existe»</li>
+            <li><strong>MOSTRAR</strong> (actualizar pantalla)</li>
+          </ol>
+        </div>
+        <div class="bg-violet-50 border border-violet-200 rounded-xl p-4">
+          <p class="font-semibold text-violet-800 mb-2">LEER, MODIFICAR, ELIMINAR</p>
+          <ol class="list-decimal list-inside space-y-1 text-sm">
+            <li><strong>BUSCAR</strong></li>
+            <li>Si existe → hacer la operación<br>Si no existe → mensaje «no existe»</li>
+            <li><strong>MOSTRAR</strong> (actualizar pantalla)</li>
+          </ol>
+        </div>
+      </div>
+
+      <p class="mt-4 mb-2 font-semibold">Ejemplo en tu <code class="bg-slate-100 px-1 rounded">crud.js</code> — función agregar:</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>if (posicion === -1) {          // no existe → se puede crear
+  lista.push(nuevaImagen);
+  resultado.mensaje = "Anime agregado correctamente.";
+} else if (posicion &gt;= 0) {    // ya existe
+  resultado.mensaje = "Ese anime ya existe.";
+}</code></pre>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Diapositiva 2 — La función buscar paso a paso</h2>
+
+      <figure class="mb-6">
+        <img
+          src="img/diapositiva-buscar.png"
+          alt="Diapositiva del curso: ejemplo de la función buscar con bucle while y array imagenes"
+          class="w-full rounded-xl border border-slate-200 shadow-md"
+          loading="lazy"
+        />
+        <figcaption class="text-center text-sm text-slate-500 mt-2">Diapositiva de la profe — EJEMPLO BUSCAR IMAGEN (New York, pos. 2)</figcaption>
+      </figure>
+
+      <h3 class="font-bold text-slate-700 mb-2">Los datos (array imagenes)</h3>
+      <p class="mb-3">En el ejemplo del curso hay un array con ciudades. Cada elemento tiene una <strong>posición</strong>:</p>
+      <div class="overflow-x-auto rounded-xl border border-slate-200 mb-4">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-700 text-white">
+            <tr><th class="px-4 py-2 text-left">Posición</th><th class="px-4 py-2 text-left">Nombre</th></tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr><td class="px-4 py-2">0</td><td class="px-4 py-2">Barcelona</td></tr>
+            <tr><td class="px-4 py-2">1</td><td class="px-4 py-2">París</td></tr>
+            <tr class="bg-cyan-50"><td class="px-4 py-2 font-bold">2</td><td class="px-4 py-2 font-bold">New York</td></tr>
+            <tr><td class="px-4 py-2">3</td><td class="px-4 py-2">Londre</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-4">El carrusel usa esas posiciones para saber qué foto mostrar. En el ejemplo de la diapositiva: <strong>New York está en la posición 2</strong>.</p>
+
+      <h3 class="font-bold text-slate-700 mb-2">Las variables al empezar (ejemplo: buscar «New York»)</h3>
+      <ul class="list-disc list-inside space-y-1 mb-4 text-slate-700">
+        <li><code class="bg-slate-100 px-1 rounded">encontrado = false</code> → «¿ya lo encontré?» Empieza en NO</li>
+        <li><code class="bg-slate-100 px-1 rounded">indice = -1</code> → «posición». Empieza en «no existe»</li>
+        <li><code class="bg-slate-100 px-1 rounded">i = 0</code> → contador, empieza en 0</li>
+      </ul>
+
+      <h3 class="font-bold text-slate-700 mb-2">El bucle while</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed mb-3"><code>while (i &lt; imagenes.length &amp;&amp; !encontrado)</code></pre>
+      <p class="mb-4">Significa: <em>«sigue mientras no hayas recorrido toda la lista Y no lo hayas encontrado»</em>.</p>
+      <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-4">
+        <p><strong>¿Cómo preguntar?</strong> (caja verde de la diapositiva)</p>
+        <ul class="list-disc list-inside mt-2 text-sm space-y-1">
+          <li><code class="bg-green-100 px-1 rounded">!encontrado</code> = <code class="bg-green-100 px-1 rounded">encontrado === false</code></li>
+          <li><code class="bg-green-100 px-1 rounded">encontrado</code> (sin !) = <code class="bg-green-100 px-1 rounded">encontrado === true</code></li>
+        </ul>
+      </div>
+
+      <h3 class="font-bold text-slate-700 mb-2">Recorrido del bucle buscando «New York»</h3>
+      <div class="overflow-x-auto rounded-xl border border-slate-200 mb-4">
+        <table class="w-full text-sm">
+          <thead class="bg-cyan-600 text-white">
+            <tr>
+              <th class="px-4 py-2 text-left">Vuelta</th>
+              <th class="px-4 py-2 text-left">i</th>
+              <th class="px-4 py-2 text-left">Compara</th>
+              <th class="px-4 py-2 text-left">¿Coincide?</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr><td class="px-4 py-2">1</td><td class="px-4 py-2">0</td><td class="px-4 py-2">Barcelona</td><td class="px-4 py-2">No → i++</td></tr>
+            <tr><td class="px-4 py-2">2</td><td class="px-4 py-2">1</td><td class="px-4 py-2">París</td><td class="px-4 py-2">No → i++</td></tr>
+            <tr class="bg-cyan-50 font-semibold"><td class="px-4 py-2">3</td><td class="px-4 py-2">2</td><td class="px-4 py-2">New York</td><td class="px-4 py-2">¡Sí! → indice=2, encontrado=true</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-4">El bucle <strong>para</strong> porque <code class="bg-slate-100 px-1 rounded">encontrado</code> pasa a <code class="bg-slate-100 px-1 rounded">true</code>. La función <strong>devuelve 2</strong>.</p>
+      <p class="mb-4">Si buscas <strong>«Madrid»</strong> → recorre todo, nunca coincide → devuelve <strong>-1</strong>.</p>
+
+      <h3 class="font-bold text-slate-700 mb-2">Tu código en crud.js (igual que la diapositiva)</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>const buscar = (lista, elemento) =&gt; {
+  let encontrado = false;
+  let indice = -1;
+  let i = 0;
+
+  while (i &lt; lista.length &amp;&amp; !encontrado) {
+    if (lista[i].nombre === elemento) {
+      indice = i;
+      encontrado = true;
+    }
+    i++;
+  }
+
+  return indice;   // posición o -1
+}</code></pre>
+      <p class="mt-3 text-sm text-slate-600">La profe usa <code class="bg-slate-100 px-1 rounded">==</code> y tú usas <code class="bg-slate-100 px-1 rounded">===</code>. El funcionamiento es el mismo.</p>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Cómo encaja todo en tu proyecto</h2>
+
+      <div class="space-y-4">
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <p class="font-semibold text-slate-800 mb-2">Ejemplo — Usuario busca «Naruto»</p>
+          <ol class="list-decimal list-inside space-y-1 text-sm text-slate-700">
+            <li>Escribe «Naruto» y pulsa <strong>Buscar</strong></li>
+            <li><code class="bg-slate-200 px-1 rounded">main()</code> lee el nombre y valida</li>
+            <li><code class="bg-slate-200 px-1 rounded">buscar(imagenes, "Naruto")</code> → devuelve la posición (ej. 9)</li>
+            <li><code class="bg-slate-200 px-1 rounded">main("slide", 9)</code> → el carrusel muestra Naruto</li>
+          </ol>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <p class="font-semibold text-slate-800 mb-2">Ejemplo — Admin elimina «Death Note»</p>
+          <ol class="list-decimal list-inside space-y-1 text-sm text-slate-700">
+            <li>Escribe «Death Note» y pulsa <strong>Eliminar</strong></li>
+            <li><code class="bg-slate-200 px-1 rounded">buscar()</code> → encuentra la posición</li>
+            <li><code class="bg-slate-200 px-1 rounded">eliminar()</code> → quita ese elemento del array</li>
+            <li><code class="bg-slate-200 px-1 rounded">main("slide", ...)</code> → actualiza el carrusel</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+        <p><strong>En una frase:</strong> <code class="bg-blue-100 px-1 rounded">buscar</code> recorre la lista como un clasificador: si encuentra el nombre devuelve su posición; si no, devuelve -1. <strong>Todas</strong> las operaciones CRUD pasan por ahí antes de crear, leer, modificar o eliminar.</p>
+      </div>
+
+      <h3 class="font-bold text-slate-700 mt-6 mb-3">Flujo programación estructurada (lo que pide la profe)</h3>
+      <pre class="bg-slate-100 text-slate-700 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed font-mono">Botón del usuario
+      ↓
+main()  →  lee y valida los datos del formulario
+      ↓
+buscar() / agregar() / etc.  →  reciben parámetros, devuelven return
+      ↓
+main()  →  guarda el resultado en una variable
+      ↓
+main()  →  muestra el mensaje en pantalla
+      ↓
+main("slide", indice)  →  MOSTRAR el carrusel actualizado</pre>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-3">Le carrusel + le CRUD</h2>
+      <p class="mb-3"><strong>Partie 1 — Le carrusel :</strong> afficher une image à la fois, boutons précédent / suivant, nom + description.</p>
+      <p><strong>Partie 2 — Le CRUD :</strong> boutons pour gérer la liste, la fonction <code class="bg-slate-100 px-1.5 py-0.5 rounded text-sm">buscar</code>, les fonctions créer / modifier / supprimer, et rafraîchir l'affichage après chaque action.</p>
+    </section>
+
+    <h2 class="text-2xl font-extrabold text-slate-800 pt-4">Organiser le projet en 2 pages</h2>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-3">L'idée : page utilisateur + page administrateur</h2>
+      <p class="mb-3">Au lieu de mettre tous les boutons CRUD sur une seule page, on peut séparer le projet en <strong>deux pages</strong>. C'est une approche plus professionnelle, proche des vrais sites web.</p>
+      <ul class="list-disc list-inside space-y-2 text-slate-700">
+        <li><strong>Page utilisateur</strong> (<code class="bg-slate-100 px-1.5 py-0.5 rounded text-sm">index.html</code>) → le carrusel + quelques boutons CRUD</li>
+        <li><strong>Page administrateur</strong> (<code class="bg-slate-100 px-1.5 py-0.5 rounded text-sm">admin.html</code>) → tous les boutons CRUD</li>
+      </ul>
+      <div class="mt-4 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+        <p><strong>Comme dans la vraie vie :</strong> sur Netflix, tu regardes des films (comme ton carrusel), mais tu ne peux pas supprimer la base de données. Seul l'administrateur du site peut modifier ou supprimer du contenu.</p>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Quels boutons pour les utilisateurs ?</h2>
+      <p class="mb-4">Sur la page publique, on ne montre pas tout. Voici ce qui est recommandé :</p>
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
+        <table class="w-full text-sm">
+          <thead class="bg-emerald-600 text-white">
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold">Bouton</th>
+              <th class="px-4 py-3 text-left font-semibold">Utilisateur</th>
+              <th class="px-4 py-3 text-left font-semibold">Pourquoi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold">Carrusel (Avanzar / Retroceder)</td>
+              <td class="px-4 py-3 text-green-700 font-bold">✅ Oui</td>
+              <td class="px-4 py-3">C'est le cœur de la page : regarder et naviguer</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold">Búsqueda (chercher)</td>
+              <td class="px-4 py-3 text-green-700 font-bold">✅ Oui</td>
+              <td class="px-4 py-3">L'utilisateur tape un nom et le carrusel va directement à cette fiche</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold">Agregar (ajouter)</td>
+              <td class="px-4 py-3 text-amber-600 font-bold">⚠️ Optionnel</td>
+              <td class="px-4 py-3">OK si l'utilisateur peut proposer un nouvel anime ou une nouvelle ville</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold">Modificar</td>
+              <td class="px-4 py-3 text-red-600 font-bold">❌ Non</td>
+              <td class="px-4 py-3">Risque : n'importe qui pourrait changer les infos de quelqu'un d'autre</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-3 font-semibold">Eliminar</td>
+              <td class="px-4 py-3 text-red-600 font-bold">❌ Non</td>
+              <td class="px-4 py-3">Trop dangereux pour un visiteur normal</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+        <p class="font-semibold mb-2">En résumé pour l'utilisateur :</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-700">
+          <li><strong>Indispensable :</strong> le carrusel + la recherche</li>
+          <li><strong>Optionnel :</strong> ajouter (si tu veux que les visiteurs participent)</li>
+          <li><strong>À éviter :</strong> modifier et supprimer</li>
+        </ul>
+      </div>
+      <p class="mt-4 text-sm text-slate-600"><strong>Note :</strong> <code class="bg-slate-100 px-1 rounded">buscar</code> n'est pas forcément un bouton visible. C'est souvent une fonction invisible que le code utilise en interne. Ce que l'utilisateur voit, c'est plutôt un <strong>champ de recherche</strong> + un bouton « Chercher ».</p>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Page administrateur — tous les boutons</h2>
+      <p class="mb-4">L'administrateur gère la liste. Il a besoin de <strong>tout</strong> :</p>
+      <div class="overflow-x-auto rounded-xl border border-slate-200">
+        <table class="w-full text-sm">
+          <thead class="bg-violet-600 text-white">
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold">Bouton</th>
+              <th class="px-4 py-3 text-left font-semibold">Rôle</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-semibold">Agregar</td><td class="px-4 py-3">Ajouter une nouvelle ville ou un nouvel anime</td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-semibold">Devolver / Búsqueda</td><td class="px-4 py-3">Retrouver une fiche par son nom</td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-semibold">Modificar</td><td class="px-4 py-3">Corriger une description, changer une image</td></tr>
+            <tr class="hover:bg-slate-50"><td class="px-4 py-3 font-semibold">Eliminar</td><td class="px-4 py-3">Supprimer une fiche qui ne doit plus être là</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4">Sur cette page, tu peux avoir le carrusel (pour voir le résultat) <strong>ou</strong> une liste + formulaires — les deux marchent pour l'exercice.</p>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Schéma des deux pages</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-xl p-4">
+          <h3 class="font-bold text-emerald-800 mb-3">Page utilisateur (index)</h3>
+          <ul class="space-y-2 text-sm text-slate-700">
+            <li>🖼️ Carrusel (photos + navigation)</li>
+            <li>🔍 Recherche : « Trouver Naruto »</li>
+            <li>➕ Ajouter (optionnel)</li>
+            <li class="text-red-600">❌ Pas de Modifier</li>
+            <li class="text-red-600">❌ Pas de Supprimer</li>
+          </ul>
+        </div>
+        <div class="bg-violet-50 border-2 border-violet-200 rounded-xl p-4">
+          <h3 class="font-bold text-violet-800 mb-3">Page admin (admin.html)</h3>
+          <ul class="space-y-2 text-sm text-slate-700">
+            <li>➕ Agregar</li>
+            <li>🔍 Devolver / Búsqueda</li>
+            <li>✏️ Modificar</li>
+            <li>🗑️ Eliminar</li>
+            <li>+ Carrusel ou liste pour vérifier</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-4">Comment ça marche ensemble ?</h2>
+      <p class="mb-4">Les <strong>deux pages partagent la même liste</strong> <code class="bg-slate-100 px-1.5 py-0.5 rounded text-sm">imagenes</code> (le carnet). C'est le même carnet ; seuls les <strong>boutons visibles</strong> changent.</p>
+
+      <div class="space-y-4">
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <p class="font-semibold text-slate-800 mb-2">Exemple — utilisateur cherche « One Piece » :</p>
+          <ol class="list-decimal list-inside space-y-1 text-sm text-slate-700">
+            <li>Il tape « One Piece » dans le champ de recherche</li>
+            <li>Le code appelle <code class="bg-slate-200 px-1 rounded">buscar("One Piece")</code> → retourne la position (ex. : 14)</li>
+            <li>Le carrusel affiche directement ce slide</li>
+          </ol>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <p class="font-semibold text-slate-800 mb-2">Exemple — admin supprime « Death Note » :</p>
+          <ol class="list-decimal list-inside space-y-1 text-sm text-slate-700">
+            <li>Il tape « Death Note » et clique sur Eliminar</li>
+            <li>Le code appelle <code class="bg-slate-200 px-1 rounded">buscar("Death Note")</code></li>
+            <li>Si trouvé → <code class="bg-slate-200 px-1 rounded">eliminar</code> enlève la fiche</li>
+            <li>Le carrusel se met à jour</li>
+          </ol>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <p class="font-semibold text-slate-800 mb-2">Exemple — utilisateur essaie d'ajouter « Naruto » alors qu'il existe déjà :</p>
+          <ol class="list-decimal list-inside space-y-1 text-sm text-slate-700">
+            <li><code class="bg-slate-200 px-1 rounded">buscar("Naruto")</code> → trouvé (pas -1)</li>
+            <li>Message : « Cet anime existe déjà ! »</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h2 class="text-xl font-bold text-blue-700 mb-3">Ce que la prof veut voir dans le code</h2>
+      <p class="mb-4">Même avec 2 pages, il faut toujours ces fonctions :</p>
+      <ol class="list-decimal list-inside space-y-2 text-slate-700 mb-4">
+        <li><strong>buscar</strong> — fonction indépendante (comme sur la slide du cours)</li>
+        <li><strong>agregar</strong> — avec la logique « si -1, ajouter / sinon message »</li>
+        <li><strong>modificar</strong> — avec la logique « si trouvé, modifier / sinon message »</li>
+        <li><strong>eliminar</strong> — avec la logique « si trouvé, supprimer / sinon message »</li>
+        <li><strong>devolver</strong> — retourner une fiche trouvée (c'est le « Lire » du CRUD)</li>
+      </ol>
+      <p class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+        <strong>En une phrase :</strong> Tu fais un site en deux parties — une page <strong>publique</strong> où les gens regardent le carrusel et cherchent (et éventuellement ajoutent), et une page <strong>admin</strong> où le gestionnaire peut tout faire, en passant toujours par <strong>buscar</strong> avant chaque action.
+      </p>
+    </section>
+
+    <h2 class="text-2xl font-extrabold text-slate-800 pt-4">Exemples de code</h2>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-3">1. La liste (le « carnet »)</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>const imagenes = [
+  new Imagen("img/1.jpg", "Naruto", "Shonen", "Un ninja qui veut devenir le plus fort."),
+  new Imagen("img/2.jpg", "One Piece", "Aventure", "Des pirates à la recherche d'un trésor."),
+  new Imagen("img/3.jpg", "Death Note", "Thriller", "Un carnet qui peut tuer des gens.")
+];</code></pre>
+      <div class="overflow-x-auto rounded-xl border border-slate-200 mt-4">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-700 text-white">
+            <tr><th class="px-4 py-2 text-left">Position</th><th class="px-4 py-2 text-left">Nom</th></tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            <tr><td class="px-4 py-2">0</td><td class="px-4 py-2">Naruto</td></tr>
+            <tr><td class="px-4 py-2">1</td><td class="px-4 py-2">One Piece</td></tr>
+            <tr><td class="px-4 py-2">2</td><td class="px-4 py-2">Death Note</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-3">2. La fonction buscar</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>function buscar(elemento) {
+  let encontrado = false;
+  let indice = -1;
+  let i = 0;
+
+  while (i &lt; imagenes.length &amp;&amp; !encontrado) {
+    if (imagenes[i].nombre === elemento) {
+      indice = i;
+      encontrado = true;
+    }
+    i++;
+  }
+
+  return indice;
+}</code></pre>
+      <p class="mt-4 mb-2 font-semibold">Exemples d'utilisation :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>buscar("Naruto");      // → 0  (trouvé en position 0)
+buscar("One Piece");   // → 1  (trouvé en position 1)
+buscar("Pokémon");     // → -1 (pas dans la liste)</code></pre>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-3">3. CRÉER — agregar (Ajouter)</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>function agregar(nuevaImagen) {
+  let posicion = buscar(nuevaImagen.nombre);
+
+  if (posicion === -1) {
+    imagenes.push(nuevaImagen);
+    alert("Anime ajouté avec succès !");
+  } else {
+    alert("Cet anime existe déjà !");
+  }
+}</code></pre>
+      <p class="mt-4 mb-2 font-semibold text-green-700">Exemple A — ça marche :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>agregar(new Imagen("img/4.jpg", "Dragon Ball Z", "Shonen", "Des combats épiques."));
+// La liste passe de 3 à 4 éléments</code></pre>
+      <p class="mt-4 mb-2 font-semibold text-red-600">Exemple B — ça ne marche pas :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>agregar(new Imagen("img/x.jpg", "Naruto", "Shonen", "Encore Naruto..."));
+// → Message : "Cet anime existe déjà !"
+// → La liste ne change pas</code></pre>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-3">4. LIRE — devolver (Afficher / Retrouver)</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>function devolver(nombre) {
+  let posicion = buscar(nombre);
+
+  if (posicion === -1) {
+    alert("Cet anime n'existe pas !");
+    return null;
+  }
+
+  return imagenes[posicion];
+}</code></pre>
+      <p class="mt-4 mb-2 font-semibold text-green-700">Exemple A — trouvé :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>let anime = devolver("One Piece");
+// On récupère l'objet One Piece
+// On peut afficher : anime.nombre, anime.descripcion, etc.</code></pre>
+      <p class="mt-4 mb-2 font-semibold text-red-600">Exemple B — pas trouvé :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>devolver("Pokémon");
+// → Message : "Cet anime n'existe pas !"
+// → Retourne null</code></pre>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-3">5. MODIFIER — modificar</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>function modificar(nombre, nuevaDescripcion) {
+  let posicion = buscar(nombre);
+
+  if (posicion === -1) {
+    alert("Cet anime n'existe pas !");
+    return;
+  }
+
+  imagenes[posicion].descripcion = nuevaDescripcion;
+  alert("Anime modifié !");
+}</code></pre>
+      <p class="mt-4 mb-2 font-semibold text-green-700">Exemple A — ça marche :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>modificar("Naruto", "Le ninja le plus connu du monde.");
+// Avant : "Un ninja qui veut devenir le plus fort."
+// Après : "Le ninja le plus connu du monde."</code></pre>
+      <p class="mt-4 mb-2 font-semibold text-red-600">Exemple B — ça ne marche pas :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>modificar("Pokémon", "Une nouvelle description...");
+// → Message : "Cet anime n'existe pas !"</code></pre>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-3">6. SUPPRIMER — eliminar</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>function eliminar(nombre) {
+  let posicion = buscar(nombre);
+
+  if (posicion === -1) {
+    alert("Cet anime n'existe pas !");
+    return;
+  }
+
+  imagenes.splice(posicion, 1);
+  alert("Anime supprimé !");
+}</code></pre>
+      <p class="mt-4 mb-2 font-semibold text-green-700">Exemple A — ça marche :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>eliminar("Death Note");
+// Avant : [Naruto, One Piece, Death Note]
+// Après : [Naruto, One Piece]
+// One Piece passe de la position 2 à la position 1</code></pre>
+      <p class="mt-4 mb-2 font-semibold text-red-600">Exemple B — ça ne marche pas :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>eliminar("Pokémon");
+// → Message : "Cet anime n'existe pas !"</code></pre>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-3">7. Scénario complet</h3>
+      <p class="font-semibold mb-2">État initial :</p>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed mb-4"><code>[0] Naruto
+[1] One Piece
+[2] Death Note</code></pre>
+      <ol class="list-decimal list-inside space-y-2 text-slate-700">
+        <li><strong>Action 1 :</strong> <code class="bg-slate-100 px-1 rounded text-sm">agregar("Dragon Ball Z")</code> → Liste : Naruto, One Piece, Death Note, Dragon Ball Z</li>
+        <li><strong>Action 2 :</strong> <code class="bg-slate-100 px-1 rounded text-sm">modificar("Naruto", "Nouvelle description")</code> → La description de Naruto change</li>
+        <li><strong>Action 3 :</strong> <code class="bg-slate-100 px-1 rounded text-sm">eliminar("Death Note")</code> → Liste : Naruto, One Piece, Dragon Ball Z</li>
+        <li><strong>Action 4 :</strong> Le carrusel affiche ces éléments quand tu cliques sur « Avanzar » / « Retroceder »</li>
+      </ol>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-3">8. Version avec les villes du cours (même logique)</h3>
+      <pre class="bg-slate-800 text-slate-100 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed"><code>const imagenes = [
+  new Imagen("barcelona.jpg", "Barcelona", "Catalunya", "Art, culture et plage."),
+  new Imagen("paris.jpg", "París", "Francia", "La ville lumière."),
+  new Imagen("newyork.jpg", "New York", "USA", "La ville qui ne dort jamais."),
+  new Imagen("londres.jpg", "Londre", "Inglaterra", "Histoire et modernité.")
+];
+
+buscar("New York");  // → 2
+buscar("Madrid");    // → -1</code></pre>
+      <p class="mt-4">La logique est <strong>identique</strong> ; seul le thème change (villes au lieu d'animes).</p>
+    </section>
+
+    <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-200">
+      <h3 class="text-lg font-bold text-slate-700 mb-4">Récapitulatif visuel</h3>
+      <pre class="bg-slate-100 text-slate-700 p-4 rounded-xl overflow-x-auto text-sm leading-relaxed font-mono">         buscar("Naruto")
+              │
+              ▼
+        ┌─────────────┐
+        │  Trouvé ?   │
+        └─────────────┘
+         /           \
+       OUI            NON
+        │              │
+   position 0      retourne -1
+        │              │
+   CRÉER: déjà là   CRÉER: on ajoute
+   MODIFIER: ok     MODIFIER: "n'existe pas"
+   SUPPRIMER: ok    SUPPRIMER: "n'existe pas"</pre>
+      <p class="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
+        <strong>En une phrase :</strong> Tu dois faire une galerie photo interactive où tu peux faire défiler les images <strong>et</strong> ajouter, modifier ou supprimer des fiches dans la liste, en passant toujours par une fonction <strong>chercher</strong> avant de modifier quoi que ce soit.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-slate-500 text-sm py-8">
+    Guide Carrusel con CRUD
+  </footer>
+
+</body>
+</html>

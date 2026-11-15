@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <title>Studio Ghibli API</title>
+</head>
+<body class="flex flex-col h-screen bg-slate-100 overflow-hidden">
+  <div id="container" class="flex flex-col flex-1 w-full mx-auto pb-2">
+    <header class="w-full py-2 bg-emerald-600 text-white flex items-center">
+      <h1 class="text-3xl ml-4 font-extrabold tracking-wide drop-shadow-[0_2px_4px_rgba(6,78,59,0.5)]">Studio Ghibli API</h1>
+    </header>
+    <div id="wrapper" class="flex flex-1 w-full">
+      <aside id="lista" class="h-full w-3/12 flex flex-col justify-between text-sm bg-slate-800 text-white">
+        <h3 id="enc-lista" class="font-bold text-center text-base pt-0.5 md:pt-2">Películas</h3>
+        <div id="lista-peliculas" class="h-px flex-1 pt-0.5 pb-2 px-0.5 overflow-y-auto text-xs md:pl-6"></div>
+        <nav class="flex justify-evenly items-center border-t border-slate-200 pb-2 shrink-0">
+          <button class="py-1 disabled:opacity-30" type="button" id="anterior">
+            <img class="w-6" title="anterior" src="previous.svg" alt="anterior">
+          </button>
+          <p class="text-xs mx-1">más...</p>
+          <button class="py-1 disabled:opacity-30" type="button" id="siguiente">
+            <img class="w-6" title="siguiente" src="next.svg" alt="siguiente">
+          </button>
+        </nav>
+      </aside>
+      <main id="pelicula" class="w-9/12 pt-0.5 pb-2 px-0.5 overflow-y-auto">
+        <h2 class="text-xl text-center text-emerald-600">Datos de la película</h2>
+        <div id="detalle-pelicula" class="p-4 hidden"></div>
+      </main>
+    </div>
+  </div>
+  <script src="./js/app.js"></script>
+</body>
+</html>

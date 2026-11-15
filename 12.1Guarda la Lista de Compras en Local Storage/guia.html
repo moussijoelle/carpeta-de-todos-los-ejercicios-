@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide — Liste de courses et Local Storage</title>
+  <style>
+    :root {
+      --fondo: #0f172a;
+      --tarjeta: #1e293b;
+      --texto: #e2e8f0;
+      --texto-suave: #94a3b8;
+      --acento: #38bdf8;
+      --importante: #fbbf24;
+      --local: #60a5fa;
+      --objeto: #34d399;
+      --boton: #c084fc;
+      --codigo-fondo: #0c1222;
+      --borde: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.7;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .contenedor {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--borde);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      color: var(--acento);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--texto-suave);
+      font-size: 1.05rem;
+    }
+
+    nav {
+      background: var(--tarjeta);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+      border-left: 4px solid var(--acento);
+    }
+
+    nav h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--texto-suave);
+      margin-bottom: 0.75rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+    }
+
+    nav a {
+      color: var(--acento);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      background: var(--tarjeta);
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.75rem;
+      border: 1px solid var(--borde);
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--borde);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.75rem;
+      color: var(--acento);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    ul, ol {
+      margin: 0 0 1rem 1.25rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .destacado {
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 4px solid var(--acento);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+    }
+
+    .resumen {
+      background: rgba(52, 211, 153, 0.12);
+      border-left: 4px solid var(--objeto);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+      font-size: 1.05rem;
+    }
+
+    .importante { color: var(--importante); font-weight: 600; }
+    .acento { color: var(--acento); font-weight: 600; }
+    .local { color: var(--local); font-weight: 600; }
+    .objeto { color: var(--objeto); font-weight: 600; }
+    .boton { color: var(--boton); font-weight: 600; }
+
+    .etiqueta {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 0.25rem;
+    }
+
+    .etiqueta-local { background: rgba(96, 165, 250, 0.2); color: var(--local); }
+    .etiqueta-objeto { background: rgba(52, 211, 153, 0.2); color: var(--objeto); }
+    .etiqueta-importante { background: rgba(251, 191, 36, 0.2); color: var(--importante); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      border: 1px solid var(--borde);
+      padding: 0.65rem 0.85rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--codigo-fondo);
+      color: var(--acento);
+    }
+
+    tr:nth-child(even) td {
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    .ejemplo-ficha {
+      background: var(--codigo-fondo);
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    .ejemplo-ficha dt {
+      color: var(--acento);
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .ejemplo-ficha dt:first-child {
+      margin-top: 0;
+    }
+
+    .ejemplo-ficha dd {
+      margin-left: 1rem;
+      color: var(--texto-suave);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <header>
+      <h1>Guide : Liste de courses et Local Storage</h1>
+      <p>Explication de l'exercice — pour débutantes, comme en cours avec un prof</p>
+    </header>
+
+    <nav>
+      <h2>Table des matières</h2>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#idee-generale">L'idée générale</a></li>
+        <li><a href="#six-points">Les 6 choses à faire</a></li>
+        <li><a href="#pourquoi">Pourquoi cet exercice ?</a></li>
+        <li><a href="#enonce">Énoncé officiel</a></li>
+        <li><a href="#resume">En une phrase</a></li>
+      </ul>
+    </nav>
+
+    <section id="introduction">
+      <h2>1. Introduction</h2>
+      <p>
+        Bonjour ! Imagine que tu as déjà une petite application sur ton ordinateur :
+        une <span class="importante">liste de courses</span> (<em>Lista de Compras</em>).
+        Tu peux y ajouter des choses à acheter, les voir à l'écran, et parfois tout effacer.
+      </p>
+      <p>
+        Cet exercice te demande de <span class="importante">l'améliorer</span>, pas de tout refaire depuis zéro.
+        Le programme de base se trouve dans le lien <span class="acento">« Ejercicios con arrays »</span>
+        (exercices avec les tableaux).
+      </p>
+    </section>
+
+    <section id="idee-generale">
+      <h2>2. L'idée générale</h2>
+      <p>
+        Avant, ta liste stockait peut-être seulement des <span class="importante">mots</span> :
+        « lait », « pain », « pommes ».
+      </p>
+      <p>
+        Maintenant, pour <span class="importante">chaque produit</span>, tu dois enregistrer
+        <span class="importante">trois informations</span> :
+      </p>
+      <ul>
+        <li>le <span class="acento">nom</span> du produit (ex. : lait)</li>
+        <li>la <span class="acento">quantité</span> à acheter (ex. : 2)</li>
+        <li>le <span class="acento">prix estimé</span> (ex. : 1,50 €)</li>
+      </ul>
+
+      <div class="destacado">
+        C'est comme une <span class="objeto">fiche par article</span>, au lieu d'un simple mot sur une feuille.
+        En programmation, on appelle ça un <span class="objeto">objet</span> : une petite boîte qui regroupe
+        plusieurs infos ensemble.
+      </div>
+
+      <h3>Exemple d'une fiche produit</h3>
+      <dl class="ejemplo-ficha">
+        <dt>Produit</dt>
+        <dd>Lait</dd>
+        <dt>Quantité</dt>
+        <dd>2</dd>
+        <dt>Prix estimé</dt>
+        <dd>1,50 €</dd>
+      </dl>
+    </section>
+
+    <section id="six-points">
+      <h2>3. Les 6 choses à faire (en langage simple)</h2>
+
+      <h3><span class="etiqueta etiqueta-objeto">1</span> Des « fiches » au lieu de simples mots</h3>
+      <p>
+        Le tableau (<em>array</em>) de la liste de courses doit stocker des
+        <span class="objeto">objets</span> (et non des chaînes de texte simples).
+        Chaque objet contient : le produit, la quantité à acheter et un prix estimé.
+      </p>
+
+      <h3><span class="etiqueta etiqueta-importante">2</span> Pas de doublons</h3>
+      <p>
+        Si « lait » est déjà dans la liste, tu ne peux <span class="importante">pas</span>
+        l'ajouter une deuxième fois. Un produit = une seule fois dans la liste.
+      </p>
+
+      <h3><span class="etiqueta etiqueta-local">3</span> Sauvegarder automatiquement</h3>
+      <p>
+        Chaque fois que la liste change (tu ajoutes ou tu enlèves quelque chose),
+        le programme doit <span class="importante">garder une copie dans le navigateur</span>.
+      </p>
+      <p>
+        C'est ce qu'on appelle le <span class="local">LocalStorage</span> : une petite mémoire
+        du navigateur, comme un <span class="acento">tiroir</span> où tu ranges ta liste.
+        Même si tu fermes la page et que tu reviens plus tard, la liste peut encore être là.
+      </p>
+
+      <h3><span class="etiqueta etiqueta-local">4</span> Recharger au démarrage</h3>
+      <p>
+        Quand tu ouvres la page, le programme doit <span class="importante">regarder dans ce tiroir</span>.
+        S'il y a une liste sauvegardée, il la <span class="importante">remet à l'écran</span>
+        pour que tu continues là où tu t'étais arrêtée.
+      </p>
+
+      <h3><span class="etiqueta etiqueta-local">5</span> Le bouton « vider la liste »</h3>
+      <p>
+        Le bouton qui vide la liste de courses doit faire <span class="importante">deux choses</span> :
+      </p>
+      <ol>
+        <li>effacer la liste à l'écran</li>
+        <li><span class="importante">supprimer aussi</span> la sauvegarde dans le <span class="local">LocalStorage</span></li>
+      </ol>
+      <p>
+        Sinon, en rechargeant la page, l'ancienne liste reviendrait — et ce ne serait pas vraiment « vide ».
+      </p>
+
+      <h3><span class="etiqueta etiqueta-importante">6</span> Nouveau bouton : « Calcular estimado a gastar »</h3>
+      <p>
+        Tu dois créer un bouton <span class="boton">« Calcular estimado a gastar »</span>
+        (Calculer le total estimé à dépenser).
+      </p>
+      <p>
+        Quand on clique dessus, il doit <span class="importante">additionner</span> tous les prix estimés
+        de la liste et indiquer combien on pense dépenser au total pour tout acheter.
+      </p>
+      <p>
+        Exemple : 2 laits à 1,50 € + 1 pain à 2 € → le programme affiche le total estimé
+        (en tenant compte des quantités et des prix de chaque fiche).
+      </p>
+    </section>
+
+    <section id="pourquoi">
+      <h2>4. Pourquoi cet exercice ?</h2>
+      <p>Tu apprends trois idées importantes en programmation web :</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>En pratique dans cet exercice</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="objeto">Objets</span></td>
+            <td>Stocker plusieurs infos ensemble (nom, quantité, prix) pour chaque produit</td>
+          </tr>
+          <tr>
+            <td><span class="local">LocalStorage</span></td>
+            <td>Garder des données même après avoir fermé la page ou le navigateur</td>
+          </tr>
+          <tr>
+            <td><span class="importante">Logique métier</span></td>
+            <td>Pas de doublons, calcul du total, sauvegarde à chaque modification, rechargement au démarrage</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="destacado">
+        <span class="local">LocalStorage</span> ne garde que du <span class="importante">texte</span>.
+        Pour sauvegarder un tableau d'objets, on le transforme en texte avec
+        <code>JSON.stringify</code> avant de l'enregistrer, et on le retransforme avec
+        <code>JSON.parse</code> quand on le relit.
+      </div>
+    </section>
+
+    <section id="enonce">
+      <h2>5. Énoncé officiel de l'exercice</h2>
+      <p>
+        Modifie le programme <strong>Lista de Compras</strong> (dans le lien
+        <strong>Ejercicios con arrays</strong>) de la manière suivante :
+      </p>
+      <ol>
+        <li>
+          Le tableau de la liste de courses doit stocker des <strong>objets</strong> (et non des strings).
+          Chaque objet contient le produit, la quantité à acheter et un prix estimé.
+        </li>
+        <li>
+          Un produit déjà enregistré dans la liste ne peut pas être répété.
+        </li>
+        <li>
+          Chaque fois que la liste change, tu dois la sauvegarder dans le <strong>LocalStorage</strong>.
+        </li>
+        <li>
+          Au démarrage du programme, vérifie le LocalStorage : si une liste est sauvegardée
+          dans le navigateur, charge-la en mémoire pour continuer à travailler.
+        </li>
+        <li>
+          Le bouton qui vide la liste de courses doit aussi supprimer la liste du LocalStorage.
+        </li>
+        <li>
+          Crée un bouton <strong>« Calcular estimado a gastar »</strong> qui indique combien
+          on estime dépenser pour acheter tout ce qui est dans la liste.
+        </li>
+      </ol>
+    </section>
+
+    <section id="resume">
+      <h2>6. En une phrase</h2>
+      <div class="resumen">
+        Tu prends ta liste de courses, tu la rends plus riche (nom + quantité + prix),
+        tu évites les doublons, tu la sauvegardes dans le navigateur à chaque modification,
+        tu la recharges au démarrage, tu effaces tout correctement (écran + mémoire),
+        et tu ajoutes un bouton pour voir le total estimé à dépenser.
+      </div>
+    </section>
+
+    <footer>
+      Guide de l'exercice 12.1 — Guarda la Lista de Compras en Local Storage
+    </footer>
+  </div>
+</body>
+</html>

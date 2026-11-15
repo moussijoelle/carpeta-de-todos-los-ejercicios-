@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía — AJAX, APIs REST y manejo de errores</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      color: #1a1a1a;
+      background: #f8f9fa;
+    }
+
+    h1 {
+      color: #c0392b;
+      border-bottom: 3px solid #e74c3c;
+      padding-bottom: 0.5rem;
+    }
+
+    h2 {
+      color: #2980b9;
+      margin-top: 2rem;
+    }
+
+    h3 {
+      color: #27ae60;
+      margin-top: 1.5rem;
+    }
+
+    section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+    }
+
+    th {
+      background: #ecf0f1;
+    }
+
+    code {
+      background: #f1f2f6;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background: #2d3436;
+      color: #dfe6e9;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    .francais {
+      border-left: 4px solid #9b59b6;
+    }
+
+    .francais h2 {
+      color: #8e44ad;
+    }
+
+    .resumen {
+      background: #fff9e6;
+      border-left: 4px solid #f39c12;
+      padding: 1rem 1.25rem;
+      border-radius: 0 6px 6px 0;
+      margin-top: 1rem;
+    }
+
+    ul {
+      padding-left: 1.25rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Resumen de los temas — AJAX, APIs REST y manejo de errores</h1>
+
+  <section>
+    <h2>1. Asincronía en JavaScript</h2>
+    <p>JavaScript ejecuta el código <strong>línea por línea</strong>, pero algunas tareas tardan (pedir datos a un servidor, esperar un temporizador). Para no bloquear la app, se usan tareas <strong>asíncronas</strong>.</p>
+
+    <h3>Evolución</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Método</th>
+          <th>Problema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Callbacks</strong></td>
+          <td>Código anidado → "Callback Hell"</td>
+        </tr>
+        <tr>
+          <td><strong>Promises</strong></td>
+          <td>Mejor, pero muchos <code>.then()</code></td>
+        </tr>
+        <tr>
+          <td><strong>Async/Await</strong></td>
+          <td>Se lee como código normal, con <code>try/catch</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Hoy se usa:</strong> <code>async/await</code> (sobre Promises). Los callbacks solo en APIs antiguas o librerías viejas.</p>
+  </section>
+
+  <section>
+    <h2>2. APIs REST y JSON</h2>
+    <p>Una <strong>API REST</strong> (como PokéAPI) es una forma estándar de pedir datos por internet.</p>
+
+    <h3>3 reglas clave</h3>
+    <ul>
+      <li>Usa métodos HTTP: <strong>GET</strong> (leer), <strong>POST</strong> (crear), <strong>PUT/PATCH</strong> (editar), <strong>DELETE</strong> (borrar)</li>
+      <li>Cada cosa tiene su <strong>URL</strong> (endpoint): <code>/pokemon</code>, <code>/pokemon/25</code> (Pikachu)</li>
+      <li>Es <strong>sin estado</strong>: cada petición es independiente; el servidor no "recuerda" quién eres</li>
+    </ul>
+
+    <p><strong>REST vs JSON:</strong> REST = las reglas del camino. JSON = el paquete con los datos que viaja.</p>
+
+    <p><strong>Hoy se usa:</strong> <code>fetch()</code> (nativo del navegador) o <strong>Axios</strong> (más cómodo para errores). Casi todo en <strong>JSON</strong>.</p>
+  </section>
+
+  <section>
+    <h2>3. try / catch / finally</h2>
+    <p>Sirve para que un error <strong>no rompa toda la app</strong>.</p>
+
+    <pre><code>try {
+  // código que puede fallar
+} catch (error) {
+  // qué hacer si falla
+} finally {
+  // siempre se ejecuta (limpieza)
+}</code></pre>
+
+    <h3>Buenas prácticas</h3>
+    <ul>
+      <li>No dejar el <code>catch</code> vacío → al menos <code>console.error</code></li>
+      <li>No usarlo para validaciones simples → mejor un <code>if</code></li>
+    </ul>
+
+    <p><strong>Hoy se usa:</strong> Igual. Es el estándar, sobre todo con <code>async/await</code>.</p>
+  </section>
+
+  <section>
+    <h2>4. Errores propios con throw new Error</h2>
+    <p>Puedes <strong>lanzar</strong> un error cuando una regla importante no se cumple (ej.: edad &lt; 18).</p>
+
+    <pre><code>if (edad &lt; 18) {
+  throw new Error("Debes ser mayor de edad.");
+}</code></pre>
+
+    <p><strong>Hoy se usa:</strong> Sí, en reglas de negocio importantes. Para cosas simples (campo vacío), mejor un <code>if</code> sin <code>throw</code>.</p>
+  </section>
+
+  <section>
+    <h2>5. Tipos de errores de JavaScript</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Error</th>
+          <th>Cuándo ocurre</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>TypeError</strong></td>
+          <td>Tipo incorrecto (ej. llamar un número como función)</td>
+        </tr>
+        <tr>
+          <td><strong>ReferenceError</strong></td>
+          <td>Variable que no existe</td>
+        </tr>
+        <tr>
+          <td><strong>SyntaxError</strong></td>
+          <td>Error de escritura en el código</td>
+        </tr>
+        <tr>
+          <td><strong>RangeError</strong></td>
+          <td>Valor fuera de rango (ej. <code>new Array(-1)</code>)</td>
+        </tr>
+        <tr>
+          <td><strong>URIError</strong></td>
+          <td>URL mal codificada</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>El objeto <code>error</code> tiene <code>error.name</code> y <code>error.message</code>.</p>
+  </section>
+
+  <section>
+    <h2>6. Casos típicos de try/catch</h2>
+    <ol>
+      <li><strong>JSON.parse</strong> — texto mal formado</li>
+      <li><strong>localStorage</strong> — almacenamiento lleno</li>
+      <li><strong>Peticiones HTTP</strong> — servidor caído, 404, sin internet</li>
+    </ol>
+
+    <p>Con <strong>Axios</strong>, los errores van al <code>catch</code> y puedes distinguir:</p>
+    <ul>
+      <li><code>error.response</code> → el servidor respondió con error (404, 500…)</li>
+      <li><code>error.request</code> → no hubo respuesta (sin red)</li>
+      <li>otro → error al preparar la petición</li>
+    </ul>
+
+    <p><strong>Hoy se usa:</strong> <code>fetch</code> + <code>try/catch</code> o Axios + <code>try/catch</code>. Ambos son habituales.</p>
+  </section>
+
+  <section class="francais">
+    <h2>En qué consiste tu ejercicio (explicación en francés)</h2>
+
+    <p><strong>Bonjour !</strong></p>
+
+    <p>Imagine que tu ouvres une application Pokémon sur ton téléphone. Tu vois plein de Pokémon, et tu veux pouvoir dire : <em>« Celui-ci, je l'aime bien, je le garde dans mes favoris »</em>.</p>
+
+    <p><strong>C'est exactement ce que tu vas faire.</strong></p>
+
+    <h3>Étape par étape, sans jargon</h3>
+
+    <ol>
+      <li>
+        <strong>Tu vas chercher des Pokémon sur Internet</strong><br>
+        Comme si tu ouvrais un livre géant sur Internet (la PokéAPI). Tu demandes : <em>« Montre-moi des Pokémon »</em>, et le site te répond avec leurs noms, images, etc.
+      </li>
+      <li>
+        <strong>Tu affiches ces Pokémon à l'écran</strong><br>
+        Comme des cartes dans une galerie. Chaque carte a un bouton, par exemple <em>« Ajouter aux favoris »</em>.
+      </li>
+      <li>
+        <strong>Quand tu cliques sur ce bouton, le Pokémon est sauvegardé</strong><br>
+        Pas sur Internet — <strong>sur ton propre navigateur</strong>, dans une petite mémoire locale appelée <strong>localStorage</strong>. C'est comme un petit carnet dans ton navigateur : même si tu fermes la page et tu reviens demain, tes favoris sont toujours là.
+      </li>
+      <li>
+        <strong>Tu montres la liste des favoris</strong><br>
+        Une zone de la page où tu vois tous les Pokémon que tu as aimés.
+      </li>
+    </ol>
+
+    <h3>Pourquoi tout ce qu'on a vu aujourd'hui est utile ?</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Ce qu'on a vu</th>
+          <th>Pourquoi c'est utile pour toi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>API REST + fetch</strong></td>
+          <td>Pour <em>récupérer</em> les Pokémon depuis PokéAPI</td>
+        </tr>
+        <tr>
+          <td><strong>async/await</strong></td>
+          <td>Parce que la réponse d'Internet met un peu de temps</td>
+        </tr>
+        <tr>
+          <td><strong>try/catch</strong></td>
+          <td>Si Internet ne marche pas ou l'API est en panne, ton app ne plante pas — elle affiche un message</td>
+        </tr>
+        <tr>
+          <td><strong>localStorage</strong></td>
+          <td>Pour <em>garder</em> tes favoris même après avoir fermé la page</td>
+        </tr>
+        <tr>
+          <td><strong>JSON</strong></td>
+          <td>Le format dans lequel les données Pokémon arrivent</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="resumen">
+      <p><strong>En une phrase :</strong></p>
+      <p>Tu vas créer une mini-app qui <strong>charge des Pokémon depuis Internet</strong>, te laisse <strong>cliquer pour les mettre en favori</strong>, et <strong>sauvegarde cette liste dans ton navigateur</strong> pour la retrouver plus tard.</p>
+      <p><strong>Résumé ultra-court :</strong> Internet → afficher Pokémon → clic → sauvegarder en local → afficher la liste des favoris.</p>
+    </div>
+  </section>
+
+</body>
+</html>
